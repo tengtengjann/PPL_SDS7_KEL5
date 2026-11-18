@@ -1,10 +1,14 @@
 <?php
 
+use App\Http\Controllers\BadgeAdminController;
+use App\Http\Controllers\BadgeController;
 use App\Http\Controllers\HomeController;
+use App\Models\Badge;
 use App\Models\Material;
 use App\Models\Mission;
 use App\Models\Quiz;
 use App\Models\User;
+use App\Models\UserBadge;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
@@ -106,10 +110,22 @@ Route::get('/peringkat', function () {
 })->name('peringkat.index');
 
 
-// 6. Profil Pengguna (profile.index)
+// 6. Profil Pengguna (profile.index) — dengan koleksi badge pencapaian
 Route::get('/profile', function () {
     $user = Auth::user() ?? User::where('email', 'faris@student.ac.id')->first();
-    return view('pages.profil-index', compact('user'));
+
+    // Ambil badge yang sudah diraih user
+    $earnedBadges = collect();
+    $totalBadges = Badge::count();
+
+    if ($user) {
+        $earnedBadges = UserBadge::where('user_id', $user->id)
+            ->with('badge')
+            ->orderBy('earned_at', 'desc')
+            ->get();
+    }
+
+    return view('pages.profil-index', compact('user', 'earnedBadges', 'totalBadges'));
 })->name('profile.index');
 
 Route::get('/profil', function () {
@@ -161,3 +177,28 @@ Route::get('/demo-switch/{persona}', function ($persona) {
     }
     return redirect()->route('home');
 })->name('demo.switch');
+
+
+// =========================================================================
+// Badge Pencapaian Belajar (Fitur Badge Achievement System)
+// =========================================================================
+
+// 7. Katalog Badge Publik (badges.index)
+Route::get('/badges', [BadgeController::class, 'index'])->name('badges.index');
+
+Route::get('/badge', function () {
+    return redirect()->route('badges.index');
+})->name('badge.index');
+
+
+// =========================================================================
+// Admin CRUD Badge (hanya untuk role SRE / Admin)
+// =========================================================================
+Route::prefix('admin/badges')->name('admin.badges.')->group(function () {
+    Route::get('/',           [BadgeAdminController::class, 'index'])->name('index');
+    Route::get('/create',     [BadgeAdminController::class, 'create'])->name('create');
+    Route::post('/',          [BadgeAdminController::class, 'store'])->name('store');
+    Route::get('/{badge}/edit', [BadgeAdminController::class, 'edit'])->name('edit');
+    Route::put('/{badge}',    [BadgeAdminController::class, 'update'])->name('update');
+    Route::delete('/{badge}', [BadgeAdminController::class, 'destroy'])->name('destroy');
+});

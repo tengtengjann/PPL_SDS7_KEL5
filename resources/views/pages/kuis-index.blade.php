@@ -35,9 +35,9 @@
                     </p>
                 </div>
                 <div class="pt-5 mt-5 border-t border-slate-100">
-                    <button type="button" class="w-full py-2.5 px-4 rounded-xl bg-blue-600 hover:bg-blue-700 text-white font-bold text-xs text-center block transition shadow-md shadow-blue-500/20">
+                    <a href="{{ route('quiz.show', $quiz) }}" class="w-full py-2.5 px-4 rounded-xl bg-blue-600 hover:bg-blue-700 text-white font-bold text-xs text-center block transition shadow-md shadow-blue-500/20">
                         Mulai Kerjakan Kuis
-                    </button>
+                    </a>
                 </div>
             </div>
         @empty

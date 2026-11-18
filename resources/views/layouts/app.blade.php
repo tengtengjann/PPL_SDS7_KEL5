@@ -104,7 +104,7 @@
                         Belajar (Materi)
                     </a>
                     <a href="{{ route('quizzes.index') }}" 
-                       class="px-3.5 py-2 rounded-xl text-sm font-semibold transition-all {{ request()->routeIs('quizzes.*') || request()->routeIs('kuis.*') ? 'bg-emerald-50 text-emerald-700 font-bold shadow-xs' : 'text-slate-600 hover:text-emerald-600 hover:bg-slate-50' }}">
+                       class="px-3.5 py-2 rounded-xl text-sm font-semibold transition-all {{ request()->routeIs('quizzes.*') || request()->routeIs('kuis.*') || request()->routeIs('quiz.*') ? 'bg-emerald-50 text-emerald-700 font-bold shadow-xs' : 'text-slate-600 hover:text-emerald-600 hover:bg-slate-50' }}">
                         Kuis
                     </a>
                     <a href="{{ route('games.index') }}" 
@@ -183,7 +183,7 @@
             <a href="{{ route('materials.index') }}" class="block px-3.5 py-2.5 rounded-xl text-base font-semibold {{ request()->routeIs('materials.*') || request()->routeIs('materi.*') ? 'bg-emerald-50 text-emerald-700 font-bold' : 'text-slate-700 hover:bg-slate-50' }}">
                 Belajar (Materi)
             </a>
-            <a href="{{ route('quizzes.index') }}" class="block px-3.5 py-2.5 rounded-xl text-base font-semibold {{ request()->routeIs('quizzes.*') || request()->routeIs('kuis.*') ? 'bg-emerald-50 text-emerald-700 font-bold' : 'text-slate-700 hover:bg-slate-50' }}">
+            <a href="{{ route('quizzes.index') }}" class="block px-3.5 py-2.5 rounded-xl text-base font-semibold {{ request()->routeIs('quizzes.*') || request()->routeIs('kuis.*') || request()->routeIs('quiz.*') ? 'bg-emerald-50 text-emerald-700 font-bold' : 'text-slate-700 hover:bg-slate-50' }}">
                 Kuis
             </a>
             <a href="{{ route('games.index') }}" class="block px-3.5 py-2.5 rounded-xl text-base font-semibold {{ request()->routeIs('games.*') || request()->routeIs('game.*') ? 'bg-emerald-50 text-emerald-700 font-bold' : 'text-slate-700 hover:bg-slate-50' }}">

@@ -32,7 +32,7 @@
         <div class="pt-6 border-t border-slate-100 flex flex-wrap items-center justify-between gap-4">
             <span class="text-xs text-slate-400">Modul Edukasi SDG 7 &bull; EnergiKita</span>
             @if($material->quizzes->count() > 0)
-                <a href="{{ route('quizzes.index') }}" class="px-5 py-2.5 rounded-xl bg-blue-600 hover:bg-blue-700 text-white font-bold text-xs shadow-md shadow-blue-500/20">
+                <a href="{{ route('quiz.show', $material->quizzes->first()) }}" class="px-5 py-2.5 rounded-xl bg-blue-600 hover:bg-blue-700 text-white font-bold text-xs shadow-md shadow-blue-500/20">
                     Ikuti Kuis Materi Ini &rarr;
                 </a>
             @else

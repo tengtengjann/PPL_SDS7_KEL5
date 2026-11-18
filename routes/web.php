@@ -3,6 +3,7 @@
 use App\Http\Controllers\BadgeAdminController;
 use App\Http\Controllers\BadgeController;
 use App\Http\Controllers\HomeController;
+use App\Http\Controllers\QuizController;
 use App\Models\Badge;
 use App\Models\Material;
 use App\Models\Mission;
@@ -62,7 +63,7 @@ Route::get('/materi/{id}', function ($id) {
 })->name('materi.show');
 
 
-// 2. Kuis Cepat (quizzes.index)
+// 2. Kuis Cepat (quizzes.index) — Tetap mempertahankan rute lama
 Route::prefix('quizzes')->name('quizzes.')->group(function () {
     Route::get('/', function () {
         $quizzes = Quiz::with('material', 'questions')->get();
@@ -72,6 +73,13 @@ Route::prefix('quizzes')->name('quizzes.')->group(function () {
 Route::get('/kuis', function () {
     return redirect()->route('quizzes.index');
 })->name('kuis.index');
+
+// 2b. Fitur Pengerjaan Kuis Pilihan Ganda (QuizController)
+Route::prefix('quiz')->name('quiz.')->group(function () {
+    Route::get('/',           [QuizController::class, 'index'])->name('index');
+    Route::get('/{quiz}',     [QuizController::class, 'show'])->name('show');
+    Route::post('/{quiz}/submit', [QuizController::class, 'submit'])->name('submit');
+});
 
 
 // 3. Misi Harian (missions.index)

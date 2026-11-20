@@ -11,6 +11,15 @@ class Material extends Model
 {
     use HasFactory;
 
+    public const CATEGORIES = [
+        'Energi Surya',
+        'Energi Angin',
+        'Energi Air',
+        'Hemat Energi',
+        'Biomassa',
+        'Geotermal',
+    ];
+
     protected $fillable = [
         'title',
         'category',

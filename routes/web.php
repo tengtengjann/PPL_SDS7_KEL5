@@ -3,6 +3,7 @@
 use App\Http\Controllers\BadgeAdminController;
 use App\Http\Controllers\BadgeController;
 use App\Http\Controllers\HomeController;
+use App\Http\Controllers\MaterialController;
 use App\Http\Controllers\QuizController;
 use App\Models\Badge;
 use App\Models\Material;
@@ -29,25 +30,15 @@ Route::get('/', [HomeController::class, 'index'])->name('home');
 // Navigasi Fitur Utama (PBI-003): Named Routes Placeholder
 // =========================================================================
 
-// 1. Belajar / Materi Energi (materials.index)
+// 1. Belajar / Materi Energi (materials.index) - Modul F-06
 Route::prefix('materials')->name('materials.')->group(function () {
-    Route::get('/', function () {
-        $materials = Material::all();
-        $categories = Material::select('category')->distinct()->pluck('category');
-        return view('pages.materi-index', compact('materials', 'categories'));
-    })->name('index');
-
-    Route::get('/category/{category}', function ($category) {
-        $categoryName = str_replace('-', ' ', ucwords($category, '-'));
-        $materials = Material::where('category', 'like', "%{$categoryName}%")->get();
-        return view('pages.materi-category', compact('materials', 'categoryName'));
-    })->name('category');
-
-    Route::get('/{id}', function ($id) {
-        $material = Material::with('quizzes')->findOrFail($id);
-        return view('pages.materi-detail', compact('material'));
-    })->name('show');
+    Route::get('/', [MaterialController::class, 'index'])->name('index');
+    Route::get('/category/{category}', [MaterialController::class, 'category'])->name('category');
+    Route::get('/{id}', [MaterialController::class, 'show'])->name('show');
 });
+
+// Endpoint API pendukung untuk F-06
+Route::get('/api/materials', [MaterialController::class, 'index'])->name('web.api.materials.index');
 
 // Alias rute bahasa Indonesia untuk fleksibilitas
 Route::get('/materi', function () {

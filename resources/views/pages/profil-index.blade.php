@@ -1,6 +1,6 @@
 @extends('layouts.app')
 
-@section('title', 'Profil Pengguna — EnergiKita')
+@section('title', 'Profil Saya — EnergiKita')
 
 @section('content')
 <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-12 space-y-8">
@@ -8,43 +8,88 @@
     {{-- ============================================================
          KARTU PROFIL UTAMA
          ============================================================ --}}
-    <div class="bg-white rounded-3xl border border-slate-200 p-8 shadow-xs space-y-6">
-        <div class="flex flex-col sm:flex-row items-center sm:items-start gap-6 text-center sm:text-left">
-            <div class="w-20 h-20 rounded-2xl bg-gradient-to-tr from-emerald-600 to-teal-500 text-white font-black text-3xl flex items-center justify-center shadow-lg shadow-emerald-500/20">
-                {{ strtoupper(substr($user->name ?? 'G', 0, 1)) }}
-            </div>
-            <div class="space-y-1 flex-1">
-                <div class="flex flex-wrap items-center justify-center sm:justify-start gap-2">
-                    <h1 class="text-2xl font-extrabold text-slate-900">{{ $user->name ?? 'Pengunjung' }}</h1>
-                    <span class="px-2.5 py-0.5 rounded-full text-xs font-bold uppercase {{ ($user->role ?? '') === 'sre' ? 'bg-purple-100 text-purple-800' : 'bg-emerald-100 text-emerald-800' }}">
-                        {{ ($user->role ?? '') === 'sre' ? 'Organisasi SRE (Admin)' : 'Mahasiswa' }}
-                    </span>
-                </div>
-                <p class="text-xs text-slate-500">{{ $user->email ?? '-' }}</p>
-                <div class="pt-2 flex flex-wrap items-center justify-center sm:justify-start gap-3">
-                    <span class="text-xs font-bold px-3 py-1 rounded-lg bg-amber-50 text-amber-800 border border-amber-200">
-                        ⚡ {{ $user->xp ?? 0 }} XP
-                    </span>
-                    <span class="text-xs font-bold px-3 py-1 rounded-lg bg-emerald-50 text-emerald-800 border border-emerald-200">
-                        🏅 Badge: {{ $user->current_badge ? $user->current_badge->name : 'Energy Beginner' }}
-                    </span>
-                    <span class="text-xs font-bold px-3 py-1 rounded-lg bg-purple-50 text-purple-800 border border-purple-200">
-                        🎖️ {{ $earnedBadges->count() }} Badge Diraih
+    <div class="bg-white rounded-3xl border border-slate-200 shadow-xs overflow-hidden">
+
+        {{-- Header Gradient --}}
+        <div class="relative h-32 bg-gradient-to-r from-emerald-600 via-teal-500 to-amber-400">
+            <div class="absolute -bottom-12 left-8">
+                <div class="w-24 h-24 rounded-2xl bg-white shadow-lg flex items-center justify-center border-4 border-white">
+                    <span class="text-4xl font-black text-emerald-600">
+                        {{ strtoupper(substr($user->name ?? 'U', 0, 1)) }}
                     </span>
                 </div>
             </div>
         </div>
 
-        <div class="pt-6 border-t border-slate-100 flex flex-wrap gap-3">
-            <a href="{{ route('home') }}" class="px-5 py-2.5 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-800 text-xs font-bold transition">
-                &larr; Kembali ke Beranda
-            </a>
-            <a href="{{ route('badges.index') }}" class="px-5 py-2.5 rounded-xl bg-amber-50 hover:bg-amber-100 text-amber-800 text-xs font-bold border border-amber-200 transition">
-                🏅 Lihat Katalog Badge
-            </a>
-            <a href="{{ route('materi.index') }}" class="px-5 py-2.5 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-bold transition shadow-md shadow-emerald-600/20">
-                Lanjutkan Belajar Materi
-            </a>
+        {{-- Profile Info --}}
+        <div class="pt-16 pb-8 px-8 space-y-6">
+            <div class="flex flex-col sm:flex-row items-start justify-between gap-4">
+                <div class="space-y-1">
+                    <div class="flex flex-wrap items-center gap-2">
+                        <h1 class="text-2xl font-extrabold text-slate-900">{{ $user->name }}</h1>
+                        <span class="px-2.5 py-0.5 rounded-full text-xs font-bold uppercase
+                            {{ $user->role === 'sre' || $user->role === 'admin' ? 'bg-purple-100 text-purple-800' : 'bg-emerald-100 text-emerald-800' }}">
+                            {{ $user->role === 'sre' || $user->role === 'admin' ? 'Admin SRE' : 'Mahasiswa' }}
+                        </span>
+                    </div>
+                    <p class="text-sm text-slate-500">{{ $user->email }}</p>
+                </div>
+
+                <div class="flex flex-wrap items-center gap-2">
+                    <span class="text-xs font-bold px-3 py-1.5 rounded-lg bg-amber-50 text-amber-800 border border-amber-200">
+                        ⚡ {{ $user->xp ?? 0 }} XP
+                    </span>
+                    <span class="text-xs font-bold px-3 py-1.5 rounded-lg bg-emerald-50 text-emerald-800 border border-emerald-200">
+                        🏅 {{ $user->current_badge ? $user->current_badge->name : 'Energy Beginner' }}
+                    </span>
+                </div>
+            </div>
+
+            {{-- Detail Informasi Akun --}}
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                <div class="p-4 rounded-2xl bg-slate-50 border border-slate-100">
+                    <p class="text-[11px] font-bold text-slate-400 uppercase tracking-wider mb-1">Nama Lengkap</p>
+                    <p class="text-sm font-semibold text-slate-800">{{ $user->name }}</p>
+                </div>
+                <div class="p-4 rounded-2xl bg-slate-50 border border-slate-100">
+                    <p class="text-[11px] font-bold text-slate-400 uppercase tracking-wider mb-1">Email</p>
+                    <p class="text-sm font-semibold text-slate-800">{{ $user->email }}</p>
+                </div>
+                <div class="p-4 rounded-2xl bg-slate-50 border border-slate-100">
+                    <p class="text-[11px] font-bold text-slate-400 uppercase tracking-wider mb-1">Role / Peran</p>
+                    <p class="text-sm font-semibold text-slate-800">
+                        {{ $user->role === 'sre' || $user->role === 'admin' ? 'Organisasi SRE (Admin)' : 'Mahasiswa' }}
+                    </p>
+                </div>
+                <div class="p-4 rounded-2xl bg-slate-50 border border-slate-100">
+                    <p class="text-[11px] font-bold text-slate-400 uppercase tracking-wider mb-1">Total XP</p>
+                    <p class="text-sm font-semibold text-amber-700">⚡ {{ $user->xp ?? 0 }} Poin Pengalaman</p>
+                </div>
+                <div class="p-4 rounded-2xl bg-slate-50 border border-slate-100">
+                    <p class="text-[11px] font-bold text-slate-400 uppercase tracking-wider mb-1">Bergabung Sejak</p>
+                    <p class="text-sm font-semibold text-slate-800">{{ $user->created_at ? $user->created_at->translatedFormat('d F Y') : '-' }}</p>
+                </div>
+                <div class="p-4 rounded-2xl bg-slate-50 border border-slate-100">
+                    <p class="text-[11px] font-bold text-slate-400 uppercase tracking-wider mb-1">Badge Diraih</p>
+                    <p class="text-sm font-semibold text-purple-700">🎖️ {{ $earnedBadges->count() }} Badge</p>
+                </div>
+            </div>
+
+            {{-- Navigasi Cepat --}}
+            <div class="pt-6 border-t border-slate-100 flex flex-wrap gap-3">
+                <a href="{{ route('home') }}" class="px-5 py-2.5 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-800 text-xs font-bold transition">
+                    &larr; Kembali ke Beranda
+                </a>
+                <a href="{{ route('learning-progress.index') }}" class="px-5 py-2.5 rounded-xl bg-blue-50 hover:bg-blue-100 text-blue-800 text-xs font-bold border border-blue-200 transition">
+                    📊 Progres Belajar
+                </a>
+                <a href="{{ route('quiz-history.index') }}" class="px-5 py-2.5 rounded-xl bg-indigo-50 hover:bg-indigo-100 text-indigo-800 text-xs font-bold border border-indigo-200 transition">
+                    📝 Riwayat Kuis
+                </a>
+                <a href="{{ route('badges.index') }}" class="px-5 py-2.5 rounded-xl bg-amber-50 hover:bg-amber-100 text-amber-800 text-xs font-bold border border-amber-200 transition">
+                    🏅 Katalog Badge
+                </a>
+            </div>
         </div>
     </div>
 
@@ -121,7 +166,7 @@
                 <p class="text-sm text-slate-500 mt-1 max-w-sm mx-auto">
                     Mulai pelajari materi dan selesaikan kuis untuk mendapatkan badge pencapaian pertama Anda!
                 </p>
-                <a href="{{ route('materials.index') }}" 
+                <a href="{{ route('materials.index') }}"
                    class="inline-flex items-center gap-2 mt-5 px-5 py-2.5 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white text-sm font-bold shadow-md transition">
                     📖 Mulai Belajar Sekarang
                 </a>

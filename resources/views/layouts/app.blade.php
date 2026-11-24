@@ -119,6 +119,16 @@
                        class="px-3.5 py-2 rounded-xl text-sm font-semibold transition-all {{ request()->routeIs('badges.*') ? 'bg-emerald-50 text-emerald-700 font-bold shadow-xs' : 'text-slate-600 hover:text-emerald-600 hover:bg-slate-50' }}">
                         🏅 Badge
                     </a>
+                    @auth
+                    <a href="{{ route('learning-progress.index') }}" 
+                       class="px-3.5 py-2 rounded-xl text-sm font-semibold transition-all {{ request()->routeIs('learning-progress.*') ? 'bg-emerald-50 text-emerald-700 font-bold shadow-xs' : 'text-slate-600 hover:text-emerald-600 hover:bg-slate-50' }}">
+                        📊 Progres
+                    </a>
+                    <a href="{{ route('quiz-history.index') }}" 
+                       class="px-3.5 py-2 rounded-xl text-sm font-semibold transition-all {{ request()->routeIs('quiz-history.*') ? 'bg-emerald-50 text-emerald-700 font-bold shadow-xs' : 'text-slate-600 hover:text-emerald-600 hover:bg-slate-50' }}">
+                        📝 Riwayat Kuis
+                    </a>
+                    @endauth
                 </nav>
 
                 <!-- Tombol Profil / Login di Kanan (PBI-003) -->
@@ -195,6 +205,14 @@
             <a href="{{ route('badges.index') }}" class="block px-3.5 py-2.5 rounded-xl text-base font-semibold {{ request()->routeIs('badges.*') ? 'bg-emerald-50 text-emerald-700 font-bold' : 'text-slate-700 hover:bg-slate-50' }}">
                 🏅 Badge
             </a>
+            @auth
+            <a href="{{ route('learning-progress.index') }}" class="block px-3.5 py-2.5 rounded-xl text-base font-semibold {{ request()->routeIs('learning-progress.*') ? 'bg-emerald-50 text-emerald-700 font-bold' : 'text-slate-700 hover:bg-slate-50' }}">
+                📊 Progres Belajar
+            </a>
+            <a href="{{ route('quiz-history.index') }}" class="block px-3.5 py-2.5 rounded-xl text-base font-semibold {{ request()->routeIs('quiz-history.*') ? 'bg-emerald-50 text-emerald-700 font-bold' : 'text-slate-700 hover:bg-slate-50' }}">
+                📝 Riwayat Kuis
+            </a>
+            @endauth
             
             <div class="pt-4 border-t border-slate-100 flex flex-col gap-2.5">
                 @auth
@@ -302,6 +320,9 @@
                         <li><a href="{{ route('games.index') }}" class="hover:text-emerald-400 transition">Game Interaktif</a></li>
                         <li><a href="{{ route('leaderboard.index') }}" class="hover:text-emerald-400 transition">Papan Peringkat</a></li>
                         <li><a href="{{ route('badges.index') }}" class="hover:text-emerald-400 transition">🏅 Badge Pencapaian</a></li>
+                        <li><a href="{{ route('profile.index') }}" class="hover:text-emerald-400 transition">👤 Profil Saya</a></li>
+                        <li><a href="{{ route('learning-progress.index') }}" class="hover:text-emerald-400 transition">📊 Progres Belajar</a></li>
+                        <li><a href="{{ route('quiz-history.index') }}" class="hover:text-emerald-400 transition">📝 Riwayat Kuis</a></li>
                     </ul>
                 </div>
 

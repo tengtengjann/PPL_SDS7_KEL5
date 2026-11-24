@@ -108,13 +108,16 @@ class HomeTest extends TestCase
         $response->assertSee('Misi Harian');
         $response->assertSee('Kumpulkan XP');
 
-        // 3. Memastikan semua named routes tujuan dapat diakses tanpa error (status 200)
+        // 3. Memastikan semua named routes tujuan dapat diakses tanpa error
         $this->get(route('materials.index'))->assertStatus(200);
         $this->get(route('quizzes.index'))->assertStatus(200);
         $this->get(route('missions.index'))->assertStatus(200);
         $this->get(route('games.index'))->assertStatus(200);
         $this->get(route('leaderboard.index'))->assertStatus(200);
-        $this->get(route('profile.index'))->assertStatus(200);
+
+        // Halaman profil dilindungi auth middleware, dapat diakses saat login
+        $student = User::where('email', 'faris@student.ac.id')->first();
+        $this->actingAs($student)->get(route('profile.index'))->assertStatus(200);
     }
 
     /**

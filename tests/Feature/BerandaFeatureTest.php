@@ -80,13 +80,16 @@ class BerandaFeatureTest extends TestCase
         $response->assertSee('Misi Harian');
         $response->assertSee('Kumpulkan XP');
 
-        // Pastikan semua named routes utama dapat diakses langsung (status 200)
+        // Pastikan semua named routes utama dapat diakses langsung
         $this->get(route('materials.index'))->assertStatus(200);
         $this->get(route('quizzes.index'))->assertStatus(200);
         $this->get(route('missions.index'))->assertStatus(200);
         $this->get(route('games.index'))->assertStatus(200);
         $this->get(route('leaderboard.index'))->assertStatus(200);
-        $this->get(route('profile.index'))->assertStatus(200);
+
+        // Halaman profil dilindungi auth middleware, dapat diakses saat login
+        $student = User::where('email', 'faris@student.ac.id')->first();
+        $this->actingAs($student)->get(route('profile.index'))->assertStatus(200);
     }
 
     /**

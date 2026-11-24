@@ -386,7 +386,13 @@
 
                         <div class="flex items-center justify-between text-xs text-slate-400 pt-1">
                             <span>{{ $userProgress['completed_count'] }} dari {{ $userProgress['total_materials'] }} materi telah diselesaikan</span>
-                            <span>{{ $userProgress['in_progress_count'] }} sedang dipelajari</span>
+                            @auth
+                                <a href="{{ route('learning-progress.index') }}" class="text-xs font-bold text-emerald-400 hover:text-emerald-300 underline">
+                                    Lihat Progres Lengkap &rarr;
+                                </a>
+                            @else
+                                <span>{{ $userProgress['in_progress_count'] }} sedang dipelajari</span>
+                            @endauth
                         </div>
                     </div>
 
@@ -422,6 +428,17 @@
                         </div>
 
                     </div>
+
+                    @auth
+                        <div class="pt-2 flex flex-wrap gap-3">
+                            <a href="{{ route('learning-progress.index') }}" class="inline-flex items-center gap-2 px-4 py-2 rounded-xl bg-white/10 hover:bg-white/20 text-xs font-bold text-white transition border border-white/10">
+                                📊 Pantau Progres Belajar &rarr;
+                            </a>
+                            <a href="{{ route('quiz-history.index') }}" class="inline-flex items-center gap-2 px-4 py-2 rounded-xl bg-white/10 hover:bg-white/20 text-xs font-bold text-white transition border border-white/10">
+                                📝 Lihat Riwayat Kuis &rarr;
+                            </a>
+                        </div>
+                    @endauth
 
                 </div>
 

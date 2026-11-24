@@ -3,8 +3,11 @@
 use App\Http\Controllers\BadgeAdminController;
 use App\Http\Controllers\BadgeController;
 use App\Http\Controllers\HomeController;
+use App\Http\Controllers\LearningProgressController;
 use App\Http\Controllers\MaterialController;
+use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\QuizController;
+use App\Http\Controllers\QuizHistoryController;
 use App\Models\Badge;
 use App\Models\Material;
 use App\Models\Mission;
@@ -109,23 +112,13 @@ Route::get('/peringkat', function () {
 })->name('peringkat.index');
 
 
-// 6. Profil Pengguna (profile.index) — dengan koleksi badge pencapaian
-Route::get('/profile', function () {
-    $user = Auth::user() ?? User::where('email', 'faris@student.ac.id')->first();
-
-    // Ambil badge yang sudah diraih user
-    $earnedBadges = collect();
-    $totalBadges = Badge::count();
-
-    if ($user) {
-        $earnedBadges = UserBadge::where('user_id', $user->id)
-            ->with('badge')
-            ->orderBy('earned_at', 'desc')
-            ->get();
-    }
-
-    return view('pages.profil-index', compact('user', 'earnedBadges', 'totalBadges'));
-})->name('profile.index');
+// 6. Profil Pengguna, Progres Belajar, Riwayat Kuis — dilindungi middleware auth
+Route::middleware('auth')->group(function () {
+    Route::get('/profile', [ProfileController::class, 'index'])->name('profile.index');
+    Route::get('/learning-progress', [LearningProgressController::class, 'index'])->name('learning-progress.index');
+    Route::post('/learning-progress/{material}/complete', [LearningProgressController::class, 'markComplete'])->name('learning-progress.complete');
+    Route::get('/quiz-history', [QuizHistoryController::class, 'index'])->name('quiz-history.index');
+});
 
 Route::get('/profil', function () {
     return redirect()->route('profile.index');

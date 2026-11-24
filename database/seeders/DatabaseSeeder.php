@@ -17,6 +17,7 @@ class DatabaseSeeder extends Seeder
         $this->call([
             EnergiKitaSeeder::class,
             QuestionSeeder::class,
+            BadgeSeeder::class,
         ]);
     }
 }

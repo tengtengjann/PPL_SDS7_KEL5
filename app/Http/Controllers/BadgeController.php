@@ -24,6 +24,11 @@ class BadgeController extends Controller
         $earnedBadges = collect();
 
         if (Auth::check()) {
+            $user = Auth::user();
+            foreach (['modules_completed', 'quizzes_passed', 'xp_reached'] as $type) {
+                $this->checkAndAwardBadge($user, $type);
+            }
+
             $earnedBadges = UserBadge::where('user_id', Auth::id())
                 ->with('badge')
                 ->get()

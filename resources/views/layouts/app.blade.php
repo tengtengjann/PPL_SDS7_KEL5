@@ -5,364 +5,502 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>@yield('title', 'EnergiKita — Edukasi Energi Bersih & Terjangkau (SDG 7)')</title>
-    
-    <!-- Google Fonts: Plus Jakarta Sans -->
+
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
-    
-    {{-- Tailwind CSS via CDN (tanpa perlu npm run build) --}}
+    <link href="https://fonts.googleapis.com/css2?family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,500;1,6..72,400&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+    {{-- Tailwind CSS via CDN + tema global "Area" (eco-minimalism) --}}
     <script src="https://cdn.tailwindcss.com"></script>
-    
+    <script>
+        // Palet tunggal: moss (hijau lumut) & sand (pasir hangat).
+        // Warna bawaan Tailwind yang mencolok (blue, emerald, amber, indigo, purple, dll.)
+        // dipetakan ulang ke palet ini agar SEMUA halaman otomatis selaras.
+        const moss = { 50:'#F4F7F1',100:'#E6EFE0',200:'#CFDEC4',300:'#B0C79F',400:'#8EA873',500:'#6B8752',600:'#4E6635',700:'#3D5229',800:'#2D3A1E',900:'#1F2915',950:'#141B0D', DEFAULT:'#2D3A1E', hover:'#1F2915', light:'#E6EFE0', tint:'#F4F7F1' };
+        const sand = { 50:'#FAF7F2',100:'#F3EDE3',200:'#EDE7DD',300:'#DCD4C7',400:'#C4B59D',500:'#A8916E',600:'#8A7352',700:'#6E5A40',800:'#54452F',900:'#3B3021',950:'#241D14', DEFAULT:'#EDE7DD', light:'#F8F6F2', dark:'#DCD4C7' };
+        const stone = { 50:'#FAFAF9',100:'#F5F5F4',200:'#E7E5E4',300:'#D6D3D1',400:'#A8A29E',500:'#78716C',600:'#57534E',700:'#44403C',800:'#292524',900:'#1C1917',950:'#0C0A09' };
+        const clay = { 50:'#FBF4F2',100:'#F5E4DF',200:'#EBC9BF',300:'#DCA595',400:'#C97D69',500:'#B4604B',600:'#9A4B39',700:'#7D3C2E',800:'#5F2E24',900:'#43211A',950:'#2A140F' };
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        serif: ['Newsreader', 'Georgia', 'serif'],
+                        sans: ['Plus Jakarta Sans', 'system-ui', '-apple-system', 'sans-serif'],
+                    },
+                    colors: {
+                        moss, sand,
+                        slate: stone, gray: stone, zinc: stone, neutral: stone,
+                        emerald: moss, green: moss, lime: moss, teal: moss,
+                        blue: moss, sky: moss, cyan: moss, indigo: moss,
+                        purple: moss, violet: moss,
+                        amber: sand, yellow: sand, orange: sand,
+                        red: clay, rose: clay,
+                    }
+                }
+            }
+        }
+    </script>
+
     <style>
+        html, body { overflow-x: hidden; }
         body {
             font-family: 'Plus Jakarta Sans', system-ui, -apple-system, sans-serif;
+            background-color: #FAF9F5;
+            color: #1A1F16;
+        }
+        /* Tipografi editorial: semua judul besar memakai serif ringan */
+        h1, h2, .font-editorial {
+            font-family: 'Newsreader', Georgia, serif;
+            font-weight: 400 !important;
+            letter-spacing: -0.02em;
+        }
+        h3 { letter-spacing: -0.01em; }
+        .font-extrabold, .font-black { font-weight: 600 !important; }
+        /* Semua tombol/link berbentuk pill (konsisten dengan art style) */
+        a.rounded-xl, button.rounded-xl, a.rounded-lg, button.rounded-lg { border-radius: 9999px; }
+        /* Hilangkan bayangan berwarna yang berlebihan */
+        [class*="shadow-blue"], [class*="shadow-emerald"], [class*="shadow-amber"] { --tw-shadow-color: rgba(45,58,30,.08) !important; }
+        details > summary { list-style: none; }
+        details > summary::-webkit-details-marker { display: none; }
+        [x-cloak] { display: none !important; }
+
+        /* ========================================================
+           SMOOTH PARALLAX & SCROLL REVEAL ENGINE ("Area" Motion)
+           ======================================================== */
+        [data-parallax],
+        [data-parallax-img],
+        [data-parallax-scale],
+        [data-tilt] {
+            will-change: transform;
+            backface-visibility: hidden;
+        }
+        [data-parallax-img] {
+            transform: translate3d(0, 0, 0) scale(1.18);
+            transition: filter 0.6s ease;
+        }
+        .reveal-init {
+            opacity: 0;
+            transform: translate3d(0, 26px, 0);
+            transition:
+                opacity 0.75s cubic-bezier(0.22, 1, 0.36, 1),
+                transform 0.75s cubic-bezier(0.22, 1, 0.36, 1);
+            transition-delay: var(--reveal-delay, 0ms);
+            will-change: opacity, transform;
+        }
+        .reveal-init.is-visible {
+            opacity: 1;
+            transform: translate3d(0, 0, 0);
+        }
+        .parallax-stem {
+            transform-origin: bottom center;
+            transform: scaleY(0.15);
+            transition: transform 0.9s cubic-bezier(0.22, 1, 0.36, 1);
+            transition-delay: var(--stem-delay, 0ms);
+        }
+        .parallax-stem.is-visible {
+            transform: scaleY(1);
+        }
+        @media (prefers-reduced-motion: reduce) {
+            .reveal-init {
+                opacity: 1 !important;
+                transform: none !important;
+                transition: none !important;
+            }
+            [data-parallax], [data-parallax-img], [data-parallax-scale] {
+                transform: none !important;
+            }
         }
     </style>
 </head>
-<body class="bg-slate-50 text-slate-800 antialiased flex flex-col min-h-screen">
+<body class="bg-[#FAF9F5] text-stone-900 antialiased flex flex-col min-h-screen">
 
-    <!-- Top Demo Persona Switcher Bar (Memudahkan pengujian & demonstrasi Sprint 1) -->
-    <div class="bg-emerald-950 text-emerald-200 text-xs py-1.5 px-4 border-b border-emerald-900/60">
-        <div class="max-w-7xl mx-auto flex flex-wrap items-center justify-between gap-2">
-            <div class="flex items-center gap-2">
-                <span class="inline-flex items-center px-2 py-0.5 rounded text-[10px] font-bold bg-emerald-500/20 text-emerald-300 border border-emerald-500/30">
-                    Sprint 1 • F-01
-                </span>
-                <span class="hidden sm:inline text-slate-300">Mode Pengguna:</span>
-                <span class="font-semibold text-white">
+    @php
+        $navLinks = [
+            ['route' => 'home', 'label' => 'Beranda', 'active' => ['home']],
+            ['route' => 'materials.index', 'label' => 'Materi', 'active' => ['materials.*', 'materi.*']],
+            ['route' => 'quizzes.index', 'label' => 'Kuis', 'active' => ['quizzes.*', 'kuis.*', 'quiz.*']],
+            ['route' => 'missions.index', 'label' => 'Misi', 'active' => ['missions.*', 'misi.*']],
+            ['route' => 'games.index', 'label' => 'Game', 'active' => ['games.*', 'game.*']],
+            ['route' => 'leaderboard.index', 'label' => 'Peringkat', 'active' => ['leaderboard.*', 'peringkat.*']],
+        ];
+        $isSre = Auth::check() && Auth::user()->isSreAdmin();
+    @endphp
+
+    {{-- Bar simulasi persona (demo) — ringkas, satu baris, tidak melebar --}}
+    <div class="bg-[#1C2415] text-stone-400 text-[11px]">
+        <div class="max-w-6xl mx-auto px-4 sm:px-6 h-9 flex items-center justify-between gap-3">
+            <p class="truncate min-w-0">
+                <span class="hidden sm:inline">Mode demo &middot; </span>
+                <span class="text-stone-200 font-medium">
                     @auth
-                        {{ Auth::user()->name }} ({{ Auth::user()->role === 'sre' ? 'Admin SRE' : 'Mahasiswa' }})
+                        {{ Auth::user()->isSreAdmin() ? 'Admin SRE' : 'Mahasiswa' }}
                     @else
-                        Pengunjung (Guest)
+                        Pengunjung
                     @endauth
                 </span>
-            </div>
-            <div class="flex items-center gap-1.5 sm:gap-2">
-                <span class="text-emerald-400 text-[11px] hidden sm:inline">Simulasi Persona:</span>
-                <a href="{{ route('demo.switch', 'mahasiswa') }}" class="px-2 py-0.5 rounded bg-emerald-900/90 hover:bg-emerald-800 text-white transition text-[11px] {{ Auth::check() && Auth::user()->role === 'mahasiswa' ? 'ring-1 ring-emerald-400 font-bold bg-emerald-800' : '' }}">
-                    👨‍🎓 Mahasiswa
-                </a>
-                <a href="{{ route('demo.switch', 'sre') }}" class="px-2 py-0.5 rounded bg-emerald-900/90 hover:bg-emerald-800 text-white transition text-[11px] {{ Auth::check() && Auth::user()->role === 'sre' ? 'ring-1 ring-emerald-400 font-bold bg-emerald-800' : '' }}">
-                    🏢 Admin SRE
-                </a>
-                <a href="{{ route('demo.switch', 'guest') }}" class="px-2 py-0.5 rounded bg-emerald-900/90 hover:bg-emerald-800 text-white transition text-[11px] {{ !Auth::check() ? 'ring-1 ring-emerald-400 font-bold bg-emerald-800' : '' }}">
-                    👤 Guest
-                </a>
+            </p>
+            <div class="flex items-center gap-0.5 p-0.5 rounded-full bg-white/5 shrink-0">
+                @php
+                    $personas = [
+                        'mahasiswa' => ['Mahasiswa', Auth::check() && Auth::user()->role === 'mahasiswa'],
+                        'sre' => ['Admin SRE', Auth::check() && Auth::user()->isSreAdmin()],
+                        'guest' => ['Guest', !Auth::check()],
+                    ];
+                @endphp
+                @foreach($personas as $key => [$label, $active])
+                    <a href="{{ route('demo.switch', $key) }}"
+                       class="px-2.5 py-0.5 rounded-full transition {{ $active ? 'bg-[#E6EFE0] text-[#2D3A1E] font-semibold' : 'text-stone-400 hover:text-white' }}">
+                        {{ $label }}
+                    </a>
+                @endforeach
             </div>
         </div>
     </div>
 
-    <!-- ========================================================
-         NAVBAR / HEADER: Brand "EnergiKita" (PBI-003)
-         Tema Hijau Bersih / Eco-Friendly & Responsif
-         ======================================================== -->
-    <header class="sticky top-0 z-50 bg-white/95 backdrop-blur-md border-b border-emerald-100 shadow-xs">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div class="flex items-center justify-between h-20">
-                
-                <!-- Logo Brand "EnergiKita" di Kiri -->
-                <div class="flex items-center gap-3">
-                    <a href="{{ route('home') }}" class="group flex items-center gap-3">
-                        <div class="w-11 h-11 rounded-2xl bg-gradient-to-tr from-emerald-600 via-teal-500 to-amber-400 p-0.5 shadow-md shadow-emerald-600/20 group-hover:scale-105 transition-transform duration-200">
-                            <div class="w-full h-full bg-white rounded-[14px] flex items-center justify-center">
-                                <!-- Ikon Daun & Cahaya Eco-Friendly SVG -->
-                                <svg class="w-6 h-6 text-emerald-600" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
-                                    <path d="M12 2v8"></path>
-                                    <path d="m4.93 10.93 1.41 1.41"></path>
-                                    <path d="M2 18h2"></path>
-                                    <path d="M20 18h2"></path>
-                                    <path d="m19.07 10.93-1.41 1.41"></path>
-                                    <path d="M22 22H2"></path>
-                                    <path d="m8 6 4-4 4 4"></path>
-                                    <path d="M16 18a4 4 0 0 0-8 0"></path>
-                                </svg>
-                            </div>
-                        </div>
-                        <div>
-                            <div class="flex items-center gap-1.5">
-                                <span class="text-xl font-black tracking-tight text-slate-900">Energi<span class="text-emerald-600">Kita</span></span>
-                                <span class="px-2 py-0.5 text-[10px] font-extrabold uppercase tracking-wider rounded-full bg-amber-100 text-amber-800 border border-amber-300">
-                                    SDG 7
-                                </span>
-                            </div>
-                            <p class="text-[11px] font-medium text-slate-500 -mt-0.5 hidden sm:block">
-                                Edukasi Energi Bersih & Terjangkau
-                            </p>
-                        </div>
-                    </a>
-                </div>
+    {{-- NAVBAR --}}
+    <header class="sticky top-0 z-50 bg-[#FAF9F5]/90 backdrop-blur-md border-b border-stone-200/70">
+        {{-- Scroll Progress Bar Halus di Puncak Navbar --}}
+        <div class="h-[2px] w-full bg-transparent overflow-hidden">
+            <div id="scroll-progress-bar" class="h-full bg-[#4E6635] origin-left scale-x-0 transition-transform duration-75 ease-out"></div>
+        </div>
+        <div class="max-w-6xl mx-auto px-4 sm:px-6">
+            <div class="flex items-center justify-between h-16 gap-6">
 
-                <!-- Menu Navigasi Desktop (PBI-003) -->
-                <nav class="hidden md:flex items-center gap-1 lg:gap-2">
-                    <a href="{{ route('home') }}" 
-                       class="px-3.5 py-2 rounded-xl text-sm font-semibold transition-all {{ request()->routeIs('home') ? 'bg-emerald-50 text-emerald-700 font-bold shadow-xs' : 'text-slate-600 hover:text-emerald-600 hover:bg-slate-50' }}">
-                        Beranda
-                    </a>
-                    <a href="{{ route('materials.index') }}" 
-                       class="px-3.5 py-2 rounded-xl text-sm font-semibold transition-all {{ request()->routeIs('materials.*') || request()->routeIs('materi.*') ? 'bg-emerald-50 text-emerald-700 font-bold shadow-xs' : 'text-slate-600 hover:text-emerald-600 hover:bg-slate-50' }}">
-                        Belajar (Materi)
-                    </a>
-                    <a href="{{ route('quizzes.index') }}" 
-                       class="px-3.5 py-2 rounded-xl text-sm font-semibold transition-all {{ request()->routeIs('quizzes.*') || request()->routeIs('kuis.*') || request()->routeIs('quiz.*') ? 'bg-emerald-50 text-emerald-700 font-bold shadow-xs' : 'text-slate-600 hover:text-emerald-600 hover:bg-slate-50' }}">
-                        Kuis
-                    </a>
-                    <a href="{{ route('games.index') }}" 
-                       class="px-3.5 py-2 rounded-xl text-sm font-semibold transition-all {{ request()->routeIs('games.*') || request()->routeIs('game.*') ? 'bg-emerald-50 text-emerald-700 font-bold shadow-xs' : 'text-slate-600 hover:text-emerald-600 hover:bg-slate-50' }}">
-                        Game
-                    </a>
-                    <a href="{{ route('leaderboard.index') }}" 
-                       class="px-3.5 py-2 rounded-xl text-sm font-semibold transition-all {{ request()->routeIs('leaderboard.*') || request()->routeIs('peringkat.*') ? 'bg-emerald-50 text-emerald-700 font-bold shadow-xs' : 'text-slate-600 hover:text-emerald-600 hover:bg-slate-50' }}">
-                        Peringkat
-                    </a>
-                    <a href="{{ route('badges.index') }}" 
-                       class="px-3.5 py-2 rounded-xl text-sm font-semibold transition-all {{ request()->routeIs('badges.*') ? 'bg-emerald-50 text-emerald-700 font-bold shadow-xs' : 'text-slate-600 hover:text-emerald-600 hover:bg-slate-50' }}">
-                        🏅 Badge
-                    </a>
-                    @auth
-                    <a href="{{ route('learning-progress.index') }}" 
-                       class="px-3.5 py-2 rounded-xl text-sm font-semibold transition-all {{ request()->routeIs('learning-progress.*') ? 'bg-emerald-50 text-emerald-700 font-bold shadow-xs' : 'text-slate-600 hover:text-emerald-600 hover:bg-slate-50' }}">
-                        📊 Progres
-                    </a>
-                    <a href="{{ route('quiz-history.index') }}" 
-                       class="px-3.5 py-2 rounded-xl text-sm font-semibold transition-all {{ request()->routeIs('quiz-history.*') ? 'bg-emerald-50 text-emerald-700 font-bold shadow-xs' : 'text-slate-600 hover:text-emerald-600 hover:bg-slate-50' }}">
-                        📝 Riwayat Kuis
-                    </a>
-                    @endauth
+                {{-- Logo --}}
+                <a href="{{ route('home') }}" class="shrink-0 text-2xl font-serif tracking-tight text-stone-950 hover:text-[#2D3A1E] transition">
+                    EnergiKita<span class="text-[#4E6635]">.</span>
+                </a>
+
+                {{-- Navigasi utama (desktop) --}}
+                <nav class="hidden lg:flex items-center gap-7 text-[13px] font-medium whitespace-nowrap">
+                    @foreach($navLinks as $link)
+                        @php $active = request()->routeIs(...$link['active']); @endphp
+                        <a href="{{ route($link['route']) }}"
+                           class="relative py-1 transition {{ $active ? 'text-stone-950' : 'text-stone-500 hover:text-stone-950' }}">
+                            {{ $link['label'] }}
+                            @if($active)
+                                <span class="absolute left-0 right-0 -bottom-0.5 h-px bg-stone-900"></span>
+                            @endif
+                        </a>
+                    @endforeach
                 </nav>
 
-                <!-- Tombol Profil / Login di Kanan (PBI-003) -->
-                <div class="hidden md:flex items-center gap-3">
+                {{-- Aksi kanan --}}
+                <div class="flex items-center gap-2 shrink-0">
                     @auth
-                        <!-- Indikator XP Pengguna Aktif -->
-                        <div class="flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-amber-50 border border-amber-200/80 text-amber-800 text-xs font-black shadow-xs">
-                            <span class="text-sm">⚡</span>
-                            <span>{{ Auth::user()->xp }} XP</span>
-                        </div>
+                        @if($isSre)
+                            <a href="{{ route('admin.materials.index') }}"
+                               class="hidden md:inline-flex items-center gap-1.5 px-4 py-2 rounded-full text-xs font-semibold whitespace-nowrap transition {{ request()->routeIs('admin.*') ? 'bg-[#2D3A1E] text-white' : 'bg-[#E6EFE0] text-[#2D3A1E] hover:bg-[#D9E6D2]' }}">
+                                Panel SRE <span aria-hidden="true">↗</span>
+                            </a>
+                        @endif
 
-                        <!-- Tombol Profil -->
-                        <a href="{{ route('profile.index') }}" class="flex items-center gap-2 p-1.5 pr-3 rounded-full hover:bg-emerald-50 transition border border-slate-200">
-                            <div class="w-8 h-8 rounded-full bg-emerald-600 text-white font-bold flex items-center justify-center text-sm shadow-xs">
-                                {{ strtoupper(substr(Auth::user()->name, 0, 1)) }}
+                        {{-- Dropdown profil --}}
+                        <details class="relative hidden sm:block" id="profile-menu">
+                            <summary class="flex items-center gap-2 pl-1 pr-3 py-1 rounded-full border border-stone-200 hover:border-stone-300 bg-white/60 cursor-pointer select-none transition">
+                                <span class="w-7 h-7 rounded-full bg-[#2D3A1E] text-white text-[11px] font-semibold flex items-center justify-center">
+                                    {{ strtoupper(substr(Auth::user()->name, 0, 1)) }}
+                                </span>
+                                <span class="text-xs font-semibold text-stone-800 tabular-nums">{{ Auth::user()->xp }} XP</span>
+                                <svg class="w-3 h-3 text-stone-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M19 9l-7 7-7-7"/></svg>
+                            </summary>
+                            <div class="absolute right-0 mt-2 w-64 rounded-2xl bg-white border border-stone-200 shadow-xl shadow-stone-900/5 p-2 text-sm">
+                                <div class="px-3 py-3 border-b border-stone-100 mb-1">
+                                    <p class="font-semibold text-stone-900 truncate">{{ Auth::user()->name }}</p>
+                                    <p class="text-xs text-stone-500 truncate">{{ Auth::user()->email }}</p>
+                                </div>
+                                <a href="{{ route('profile.index') }}" class="block px-3 py-2 rounded-xl text-stone-700 hover:bg-stone-50">Profil Saya</a>
+                                <a href="{{ route('learning-progress.index') }}" class="block px-3 py-2 rounded-xl text-stone-700 hover:bg-stone-50">Progres Belajar</a>
+                                <a href="{{ route('quiz-history.index') }}" class="block px-3 py-2 rounded-xl text-stone-700 hover:bg-stone-50">Riwayat Kuis</a>
+                                <a href="{{ route('badges.index') }}" class="block px-3 py-2 rounded-xl text-stone-700 hover:bg-stone-50">Badge Pencapaian</a>
+                                @if($isSre)
+                                    <div class="my-1 border-t border-stone-100"></div>
+                                    <p class="px-3 pt-2 pb-1 text-[10px] uppercase tracking-wider text-stone-400 font-semibold">Panel SRE</p>
+                                    <a href="{{ route('admin.materials.index') }}" class="block px-3 py-2 rounded-xl text-stone-700 hover:bg-stone-50">Kelola Materi &amp; Kuis</a>
+                                    <a href="{{ route('admin.badges.index') }}" class="block px-3 py-2 rounded-xl text-stone-700 hover:bg-stone-50">Kelola Badge</a>
+                                @endif
+                                <div class="my-1 border-t border-stone-100"></div>
+                                <form method="POST" action="{{ route('logout') }}">
+                                    @csrf
+                                    <button type="submit" class="w-full text-left px-3 py-2 rounded-xl text-[#9A4B39] hover:bg-[#FBF4F2]">Keluar</button>
+                                </form>
                             </div>
-                            <span class="text-sm font-medium text-slate-800 max-w-[120px] truncate">{{ Auth::user()->name }}</span>
-                        </a>
-
-                        <!-- Tombol Keluar -->
-                        <form method="POST" action="{{ route('logout') }}" class="inline">
-                            @csrf
-                            <button type="submit" title="Keluar Akun" class="p-2 text-slate-400 hover:text-rose-600 rounded-xl hover:bg-rose-50 transition">
-                                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1" />
-                                </svg>
-                            </button>
-                        </form>
+                        </details>
                     @else
-                        <a href="{{ route('profile.index') }}" class="text-sm font-semibold text-slate-600 hover:text-emerald-600 px-3 py-2 rounded-xl transition">
-                            Profil
-                        </a>
-                        <a href="{{ route('login') }}" class="inline-flex items-center justify-center gap-2 px-5 py-2.5 rounded-xl bg-gradient-to-r from-emerald-600 to-teal-600 hover:from-emerald-700 hover:to-teal-700 text-white text-sm font-bold shadow-md shadow-emerald-600/25 transition-all transform hover:-translate-y-0.5 active:translate-y-0">
-                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 16l-4-4m0 0l4-4m-4 4h14m-5 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h7a3 3 0 013 3v1" />
-                            </svg>
-                            <span>Masuk</span>
+                        <a href="{{ route('profile.index') }}" class="hidden sm:inline text-xs font-medium text-stone-500 hover:text-stone-900 px-2 transition">Profil</a>
+                        <a href="{{ route('login') }}" class="hidden sm:inline-flex items-center gap-1.5 px-5 py-2 rounded-full bg-[#2D3A1E] hover:bg-[#1F2915] text-white text-xs font-medium transition">
+                            Masuk <span aria-hidden="true">↗</span>
                         </a>
                     @endauth
-                </div>
 
-                <!-- Tombol Hamburger Menu Mobile (NFR-04) -->
-                <div class="flex items-center md:hidden">
-                    <button type="button" id="mobile-menu-btn" class="p-2.5 rounded-xl text-slate-600 hover:text-emerald-600 hover:bg-emerald-50 focus:outline-none transition" aria-label="Toggle navigation menu">
-                        <svg id="menu-icon-open" class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.2" d="M4 6h16M4 12h16M4 18h16" />
-                        </svg>
-                        <svg id="menu-icon-close" class="w-6 h-6 hidden" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.2" d="M6 18L18 6M6 6l12 12" />
-                        </svg>
+                    {{-- Hamburger --}}
+                    <button type="button" id="mobile-menu-btn" class="lg:hidden p-2 -mr-2 rounded-full text-stone-700 hover:bg-stone-200/50 transition" aria-label="Buka menu">
+                        <svg id="menu-icon-open" class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-width="1.8" d="M4 7h16M4 12h16M4 17h16"/></svg>
+                        <svg id="menu-icon-close" class="w-5 h-5 hidden" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-width="1.8" d="M6 18L18 6M6 6l12 12"/></svg>
                     </button>
                 </div>
-
             </div>
         </div>
 
-        <!-- Menu Mobile Drawer (Responsif NFR-04) -->
-        <div id="mobile-menu" class="hidden md:hidden border-b border-emerald-100 bg-white px-4 pt-3 pb-6 space-y-2 shadow-xl animate-in slide-in-from-top-2 duration-200">
-            <a href="{{ route('home') }}" class="block px-3.5 py-2.5 rounded-xl text-base font-semibold {{ request()->routeIs('home') ? 'bg-emerald-50 text-emerald-700 font-bold' : 'text-slate-700 hover:bg-slate-50' }}">
-                Beranda
-            </a>
-            <a href="{{ route('materials.index') }}" class="block px-3.5 py-2.5 rounded-xl text-base font-semibold {{ request()->routeIs('materials.*') || request()->routeIs('materi.*') ? 'bg-emerald-50 text-emerald-700 font-bold' : 'text-slate-700 hover:bg-slate-50' }}">
-                Belajar (Materi)
-            </a>
-            <a href="{{ route('quizzes.index') }}" class="block px-3.5 py-2.5 rounded-xl text-base font-semibold {{ request()->routeIs('quizzes.*') || request()->routeIs('kuis.*') || request()->routeIs('quiz.*') ? 'bg-emerald-50 text-emerald-700 font-bold' : 'text-slate-700 hover:bg-slate-50' }}">
-                Kuis
-            </a>
-            <a href="{{ route('games.index') }}" class="block px-3.5 py-2.5 rounded-xl text-base font-semibold {{ request()->routeIs('games.*') || request()->routeIs('game.*') ? 'bg-emerald-50 text-emerald-700 font-bold' : 'text-slate-700 hover:bg-slate-50' }}">
-                Game
-            </a>
-            <a href="{{ route('leaderboard.index') }}" class="block px-3.5 py-2.5 rounded-xl text-base font-semibold {{ request()->routeIs('leaderboard.*') || request()->routeIs('peringkat.*') ? 'bg-emerald-50 text-emerald-700 font-bold' : 'text-slate-700 hover:bg-slate-50' }}">
-                Peringkat
-            </a>
-            <a href="{{ route('badges.index') }}" class="block px-3.5 py-2.5 rounded-xl text-base font-semibold {{ request()->routeIs('badges.*') ? 'bg-emerald-50 text-emerald-700 font-bold' : 'text-slate-700 hover:bg-slate-50' }}">
-                🏅 Badge
-            </a>
-            @auth
-            <a href="{{ route('learning-progress.index') }}" class="block px-3.5 py-2.5 rounded-xl text-base font-semibold {{ request()->routeIs('learning-progress.*') ? 'bg-emerald-50 text-emerald-700 font-bold' : 'text-slate-700 hover:bg-slate-50' }}">
-                📊 Progres Belajar
-            </a>
-            <a href="{{ route('quiz-history.index') }}" class="block px-3.5 py-2.5 rounded-xl text-base font-semibold {{ request()->routeIs('quiz-history.*') ? 'bg-emerald-50 text-emerald-700 font-bold' : 'text-slate-700 hover:bg-slate-50' }}">
-                📝 Riwayat Kuis
-            </a>
-            @endauth
-            
-            <div class="pt-4 border-t border-slate-100 flex flex-col gap-2.5">
+        {{-- Menu mobile --}}
+        <div id="mobile-menu" class="hidden lg:hidden border-t border-stone-200 bg-[#FAF9F5]">
+            <div class="max-w-6xl mx-auto px-4 sm:px-6 py-4 grid gap-1 text-sm">
+                <a href="{{ route('home') }}" class="py-2 {{ request()->routeIs('home') ? 'font-semibold text-stone-950' : 'text-stone-600' }}">Beranda</a>
+                <a href="{{ route('materials.index') }}" class="py-2 {{ request()->routeIs('materials.*') ? 'font-semibold text-stone-950' : 'text-stone-600' }}">Materi Belajar</a>
+                <a href="{{ route('quizzes.index') }}" class="py-2 {{ request()->routeIs('quizzes.*', 'quiz.*') ? 'font-semibold text-stone-950' : 'text-stone-600' }}">Kuis Cepat</a>
+                <a href="{{ route('missions.index') }}" class="py-2 {{ request()->routeIs('missions.*') ? 'font-semibold text-stone-950' : 'text-stone-600' }}">Misi Harian</a>
+                <a href="{{ route('games.index') }}" class="py-2 {{ request()->routeIs('games.*') ? 'font-semibold text-stone-950' : 'text-stone-600' }}">Game Edukasi</a>
+                <a href="{{ route('leaderboard.index') }}" class="py-2 {{ request()->routeIs('leaderboard.*') ? 'font-semibold text-stone-950' : 'text-stone-600' }}">Papan Peringkat</a>
+                <a href="{{ route('badges.index') }}" class="py-2 {{ request()->routeIs('badges.*') ? 'font-semibold text-stone-950' : 'text-stone-600' }}">Badge Pencapaian</a>
                 @auth
-                    <div class="flex items-center justify-between px-3.5 py-2.5 bg-slate-50 rounded-xl">
-                        <div class="flex items-center gap-2.5">
-                            <div class="w-8 h-8 rounded-full bg-emerald-600 text-white font-bold flex items-center justify-center text-sm">
-                                {{ strtoupper(substr(Auth::user()->name, 0, 1)) }}
-                            </div>
-                            <div>
-                                <p class="text-sm font-bold text-slate-800">{{ Auth::user()->name }}</p>
-                                <p class="text-xs text-amber-700 font-black">⚡ {{ Auth::user()->xp }} XP</p>
-                            </div>
+                    <a href="{{ route('learning-progress.index') }}" class="py-2 text-stone-600">Progres Belajar</a>
+                    <a href="{{ route('quiz-history.index') }}" class="py-2 text-stone-600">Riwayat Kuis</a>
+                    <a href="{{ route('profile.index') }}" class="py-2 text-stone-600">Profil Saya</a>
+                    @if($isSre)
+                        <div class="mt-2 pt-3 border-t border-stone-200 grid gap-1">
+                            <a href="{{ route('admin.materials.index') }}" class="py-2 font-semibold text-[#2D3A1E]">Panel SRE — Materi &amp; Kuis</a>
+                            <a href="{{ route('admin.badges.index') }}" class="py-2 font-semibold text-[#2D3A1E]">Panel SRE — Badge</a>
                         </div>
-                        <a href="{{ route('profile.index') }}" class="text-xs text-emerald-600 font-bold hover:underline">Lihat Profil</a>
+                    @endif
+                    <div class="mt-2 pt-3 border-t border-stone-200 flex items-center justify-between">
+                        <span class="text-stone-800 font-medium truncate">{{ Auth::user()->name }} &middot; {{ Auth::user()->xp }} XP</span>
+                        <form method="POST" action="{{ route('logout') }}">
+                            @csrf
+                            <button type="submit" class="px-4 py-1.5 rounded-full bg-stone-100 text-[#9A4B39] text-xs font-medium">Keluar</button>
+                        </form>
                     </div>
-                    <form method="POST" action="{{ route('logout') }}" class="w-full">
-                        @csrf
-                        <button type="submit" class="w-full py-2.5 px-4 text-center rounded-xl bg-slate-100 text-rose-600 font-bold text-sm hover:bg-rose-50 transition">
-                            Keluar Akun
-                        </button>
-                    </form>
                 @else
-                    <a href="{{ route('profile.index') }}" class="w-full py-2.5 px-4 text-center rounded-xl border border-slate-200 text-slate-700 font-bold text-sm hover:bg-slate-50 transition">
-                        Profil Pengguna
-                    </a>
-                    <a href="{{ route('login') }}" class="w-full py-2.5 px-4 text-center rounded-xl bg-emerald-600 text-white font-bold text-sm shadow-md hover:bg-emerald-700 transition">
-                        Masuk ke Akun
-                    </a>
+                    <a href="{{ route('login') }}" class="mt-3 block py-2.5 text-center rounded-full bg-[#2D3A1E] text-white text-xs font-medium">Masuk ke Akun ↗</a>
                 @endauth
             </div>
         </div>
     </header>
 
-    <!-- Flash Notification Messages -->
-    @if(session('success'))
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mt-4">
-            <div class="flex items-center justify-between p-4 rounded-2xl bg-emerald-50 border border-emerald-200 text-emerald-800 text-sm shadow-xs">
-                <div class="flex items-center gap-2.5">
-                    <svg class="w-5 h-5 text-emerald-600 shrink-0" fill="currentColor" viewBox="0 0 20 20">
-                        <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"/>
-                    </svg>
-                    <span class="font-medium">{{ session('success') }}</span>
+    {{-- Notifikasi flash --}}
+    @foreach(['success' => 'bg-[#E6EFE0] border-[#CFDEC4] text-[#243118]', 'error' => 'bg-[#FBF4F2] border-[#EBC9BF] text-[#7D3C2E]', 'info' => 'bg-stone-100 border-stone-200 text-stone-800'] as $type => $style)
+        @if(session($type))
+            <div class="max-w-6xl mx-auto w-full px-4 sm:px-6 mt-4">
+                <div class="flex items-center justify-between gap-4 px-5 py-3.5 rounded-2xl border text-sm {{ $style }}">
+                    <span class="font-medium">{{ session($type) }}</span>
+                    <button type="button" onclick="this.parentElement.remove()" class="opacity-50 hover:opacity-100 text-lg leading-none" aria-label="Tutup">&times;</button>
                 </div>
-                <button type="button" onclick="this.parentElement.remove()" class="text-emerald-500 hover:text-emerald-800 font-bold text-lg leading-none">&times;</button>
             </div>
-        </div>
-    @endif
+        @endif
+    @endforeach
 
-    @if(session('info'))
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mt-4">
-            <div class="flex items-center justify-between p-4 rounded-2xl bg-blue-50 border border-blue-200 text-blue-800 text-sm shadow-xs">
-                <div class="flex items-center gap-2.5">
-                    <svg class="w-5 h-5 text-blue-600 shrink-0" fill="currentColor" viewBox="0 0 20 20">
-                        <path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a1 1 0 000 2v3a1 1 0 001 1h1a1 1 0 100-2v-3a1 1 0 00-1-1H9z" clip-rule="evenodd"/>
-                    </svg>
-                    <span class="font-medium">{{ session('info') }}</span>
-                </div>
-                <button type="button" onclick="this.parentElement.remove()" class="text-blue-500 hover:text-blue-800 font-bold text-lg leading-none">&times;</button>
-            </div>
-        </div>
-    @endif
-
-    <!-- Konten Utama Halaman -->
     <main class="flex-grow">
         @yield('content')
     </main>
 
-    <!-- ========================================================
-         FOOTER SEDERHANA BERTEMA EDUKASI SDG 7
-         ======================================================== -->
-    <footer class="bg-slate-900 text-slate-300 mt-20 border-t border-slate-800">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-14">
-            <div class="grid grid-cols-1 md:grid-cols-4 gap-10">
-                
-                <!-- Kolom Brand & Pengenalan SDG 7 -->
-                <div class="md:col-span-2 space-y-4">
-                    <div class="flex items-center gap-3">
-                        <div class="w-10 h-10 rounded-xl bg-gradient-to-tr from-emerald-500 to-teal-400 flex items-center justify-center text-slate-950 font-black text-base shadow-md shadow-emerald-500/20">
-                            EK
-                        </div>
-                        <div>
-                            <span class="text-xl font-extrabold text-white">Energi<span class="text-emerald-400">Kita</span></span>
-                            <span class="ml-2 px-2 py-0.5 text-[10px] font-bold uppercase rounded-full bg-amber-400/20 text-amber-300 border border-amber-400/40">
-                                SDG 7
-                            </span>
-                        </div>
-                    </div>
-                    <p class="text-sm text-slate-400 max-w-md leading-relaxed">
-                        Platform edukasi interaktif untuk mahasiswa dan generasi muda Indonesia dalam memahami, mengadvokasi, dan menerapkan energi bersih, terbarukan, dan terjangkau sesuai pilar SDG 7 PBB.
-                    </p>
-                    <div class="flex items-center gap-2 pt-2 text-xs text-slate-400">
-                        <span class="inline-block w-2 h-2 rounded-full bg-emerald-400"></span>
-                        <span>Berkolaborasi bersama <strong>Organisasi SRE (Society of Renewable Energy)</strong></span>
-                    </div>
-                </div>
+    {{-- FOOTER --}}
+    <footer class="bg-white border-t border-stone-200 mt-24 overflow-hidden">
+        <div class="max-w-4xl mx-auto px-4 sm:px-6 pt-20 pb-16 text-center space-y-6" data-parallax="-0.05">
+            <h2 class="text-4xl sm:text-5xl text-stone-950" data-reveal>Mewujudkan masa depan energi bersih.</h2>
+            <p class="text-stone-500 text-base max-w-xl mx-auto leading-relaxed" data-reveal>
+                Platform edukasi interaktif bagi mahasiswa Indonesia untuk memahami dan menerapkan energi baru terbarukan (SDG 7).
+            </p>
+            <div data-reveal>
+                <a href="{{ route('materials.index') }}" class="inline-flex items-center gap-2 px-7 py-3 rounded-full bg-[#2D3A1E] hover:bg-[#1F2915] text-white text-sm font-medium transition">
+                    Mulai Belajar <span aria-hidden="true">↗</span>
+                </a>
+            </div>
+            <p class="text-xs text-stone-400" data-reveal>Berkolaborasi bersama Organisasi SRE (Society of Renewable Energy)</p>
+        </div>
 
-                <!-- Navigasi Belajar -->
-                <div>
-                    <h3 class="text-sm font-bold uppercase tracking-wider text-white mb-4">Navigasi Fitur</h3>
-                    <ul class="space-y-2.5 text-sm text-slate-400">
-                        <li><a href="{{ route('home') }}" class="hover:text-emerald-400 transition">Beranda</a></li>
-                        <li><a href="{{ route('materials.index') }}" class="hover:text-emerald-400 transition">Materi Belajar</a></li>
-                        <li><a href="{{ route('quizzes.index') }}" class="hover:text-emerald-400 transition">Kuis Cepat</a></li>
-                        <li><a href="{{ route('missions.index') }}" class="hover:text-emerald-400 transition">Misi Harian</a></li>
-                        <li><a href="{{ route('games.index') }}" class="hover:text-emerald-400 transition">Game Interaktif</a></li>
-                        <li><a href="{{ route('leaderboard.index') }}" class="hover:text-emerald-400 transition">Papan Peringkat</a></li>
-                        <li><a href="{{ route('badges.index') }}" class="hover:text-emerald-400 transition">🏅 Badge Pencapaian</a></li>
-                        <li><a href="{{ route('profile.index') }}" class="hover:text-emerald-400 transition">👤 Profil Saya</a></li>
-                        <li><a href="{{ route('learning-progress.index') }}" class="hover:text-emerald-400 transition">📊 Progres Belajar</a></li>
-                        <li><a href="{{ route('quiz-history.index') }}" class="hover:text-emerald-400 transition">📝 Riwayat Kuis</a></li>
-                    </ul>
+        <div class="border-t border-stone-200">
+            <div class="max-w-6xl mx-auto px-4 sm:px-6 py-8 flex flex-col md:flex-row md:items-center justify-between gap-6 text-xs text-stone-500">
+                <div class="flex flex-wrap items-center gap-x-6 gap-y-2">
+                    <a href="{{ route('home') }}" class="font-serif text-base text-stone-900">EnergiKita.</a>
+                    <a href="{{ route('materials.index') }}" class="hover:text-stone-900 transition">Materi Belajar</a>
+                    <a href="{{ route('quizzes.index') }}" class="hover:text-stone-900 transition">Kuis Cepat</a>
+                    <a href="{{ route('missions.index') }}" class="hover:text-stone-900 transition">Misi Harian</a>
+                    <a href="{{ route('leaderboard.index') }}" class="hover:text-stone-900 transition">Peringkat</a>
+                    <a href="{{ route('profile.index') }}" class="hover:text-stone-900 transition">Profil</a>
                 </div>
-
-                <!-- Topik Kategori Energi (PBI-002) -->
-                <div>
-                    <h3 class="text-sm font-bold uppercase tracking-wider text-white mb-4">Kategori Energi</h3>
-                    <ul class="space-y-2.5 text-sm text-slate-400">
-                        <li><a href="{{ route('materials.category', 'energi-surya') }}" class="hover:text-amber-400 transition">☀️ Energi Surya (Solar)</a></li>
-                        <li><a href="{{ route('materials.category', 'energi-angin') }}" class="hover:text-sky-400 transition">💨 Energi Angin (Wind)</a></li>
-                        <li><a href="{{ route('materials.category', 'energi-air') }}" class="hover:text-blue-400 transition">💧 Energi Air (Hydro)</a></li>
-                        <li><a href="{{ route('materials.category', 'hemat-energi') }}" class="hover:text-emerald-400 transition">⚡ Hemat Energi (Efisiensi)</a></li>
-                    </ul>
+                <div class="flex flex-wrap items-center gap-2">
+                    <a href="{{ route('materials.category', 'energi-surya') }}" class="px-3.5 py-1.5 rounded-full bg-stone-100 text-stone-700 hover:bg-stone-200 transition">Surya</a>
+                    <a href="{{ route('materials.category', 'energi-angin') }}" class="px-3.5 py-1.5 rounded-full bg-stone-100 text-stone-700 hover:bg-stone-200 transition">Angin</a>
+                    <a href="{{ route('materials.category', 'energi-air') }}" class="px-3.5 py-1.5 rounded-full bg-stone-100 text-stone-700 hover:bg-stone-200 transition">Air</a>
+                    <a href="{{ route('materials.category', 'hemat-energi') }}" class="px-3.5 py-1.5 rounded-full bg-[#E6EFE0] text-[#2D3A1E] hover:bg-[#D5E1CA] transition">Hemat Energi</a>
                 </div>
             </div>
-
-            <div class="mt-12 pt-8 border-t border-slate-800 flex flex-col sm:flex-row items-center justify-between text-xs text-slate-500 gap-4">
-                <p>&copy; {{ date('Y') }} EnergiKita — Edukasi Energi Bersih dan Terjangkau (SDG 7). Sprint 1 oleh Faris Dzakiy.</p>
-                <div class="flex items-center gap-4">
-                    <span class="hover:text-slate-400 cursor-pointer">Panduan SDG 7</span>
-                    <span>&bull;</span>
-                    <span class="hover:text-slate-400 cursor-pointer">Society of Renewable Energy</span>
+            <div class="border-t border-stone-100">
+                <div class="max-w-6xl mx-auto px-4 sm:px-6 py-5 flex flex-col sm:flex-row items-center justify-between gap-2 text-[11px] text-stone-400">
+                    <p>&copy; {{ date('Y') }} EnergiKita — Edukasi Energi Bersih dan Terjangkau (SDG 7).</p>
+                    <p>Target 7.1 &middot; 7.2 &middot; 7.3</p>
                 </div>
             </div>
         </div>
     </footer>
 
-    <!-- Script Hamburger Menu Mobile Responsif (NFR-04) -->
     <script>
-        document.addEventListener('DOMContentLoaded', function() {
+        document.addEventListener('DOMContentLoaded', function () {
             const btn = document.getElementById('mobile-menu-btn');
             const menu = document.getElementById('mobile-menu');
-            const iconOpen = document.getElementById('menu-icon-open');
-            const iconClose = document.getElementById('menu-icon-close');
-
             if (btn && menu) {
-                btn.addEventListener('click', function() {
+                btn.addEventListener('click', function () {
                     menu.classList.toggle('hidden');
-                    iconOpen.classList.toggle('hidden');
-                    iconClose.classList.toggle('hidden');
+                    document.getElementById('menu-icon-open').classList.toggle('hidden');
+                    document.getElementById('menu-icon-close').classList.toggle('hidden');
                 });
+            }
+            // Tutup dropdown profil saat klik di luar
+            const profile = document.getElementById('profile-menu');
+            if (profile) {
+                document.addEventListener('click', function (e) {
+                    if (!profile.contains(e.target)) profile.removeAttribute('open');
+                });
+            }
+
+            // ============================================================
+            // 1. AUTO STAGGERED SCROLL-REVEAL (Seluruh Halaman & Fitur)
+            // ============================================================
+            const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+            if (!prefersReducedMotion && 'IntersectionObserver' in window) {
+                // Daftarkan elemen otomatis di semua halaman jika belum diberi data-reveal
+                const autoSelectors = [
+                    'main h1',
+                    'main h2',
+                    'main section > div',
+                    'main .grid > a',
+                    'main .grid > div',
+                    'main .divide-y > div',
+                    'main table tbody tr',
+                    '[data-reveal]'
+                ];
+                const candidates = document.querySelectorAll(autoSelectors.join(','));
+                const parentCounters = new Map();
+
+                candidates.forEach(function (el) {
+                    // Jangan sembunyikan kontainer besar yang membungkus seluruh halaman
+                    if (el.querySelector('section') || el.id === 'materials-container') return;
+                    if (el.classList.contains('reveal-init')) return;
+
+                    const parent = el.parentElement;
+                    const count = parentCounters.get(parent) || 0;
+                    parentCounters.set(parent, count + 1);
+
+                    const delay = Math.min(count * 65, 320);
+                    el.style.setProperty('--reveal-delay', delay + 'ms');
+                    el.classList.add('reveal-init');
+                });
+
+                const revealObserver = new IntersectionObserver(function (entries, obs) {
+                    entries.forEach(function (entry) {
+                        if (entry.isIntersecting) {
+                            entry.target.classList.add('is-visible');
+                            obs.unobserve(entry.target);
+                        }
+                    });
+                }, { threshold: 0.08, rootMargin: '0px 0px -30px 0px' });
+
+                document.querySelectorAll('.reveal-init, .parallax-stem').forEach(function (el) {
+                    revealObserver.observe(el);
+                });
+            }
+
+            // ============================================================
+            // 2. SMOOTH LERP PARALLAX ENGINE (60fps requestAnimationFrame)
+            // ============================================================
+            if (!prefersReducedMotion) {
+                const parallaxEls = Array.from(document.querySelectorAll('[data-parallax]'));
+                const parallaxImgs = Array.from(document.querySelectorAll('[data-parallax-img]'));
+                const parallaxScales = Array.from(document.querySelectorAll('[data-parallax-scale]'));
+                const progressBar = document.getElementById('scroll-progress-bar');
+
+                let currentScroll = window.scrollY || 0;
+                let targetScroll = currentScroll;
+                let rafId = null;
+
+                function clamp(val, min, max) {
+                    return Math.max(min, Math.min(max, val));
+                }
+
+                function updateParallax() {
+                    // Linear interpolation (lerp) untuk efek inersia yang sangat halus
+                    currentScroll += (targetScroll - currentScroll) * 0.14;
+                    if (Math.abs(targetScroll - currentScroll) < 0.15) {
+                        currentScroll = targetScroll;
+                    }
+
+                    const vh = window.innerHeight || 800;
+
+                    // Scroll progress bar di atas navbar
+                    if (progressBar) {
+                        const maxScroll = Math.max(1, document.documentElement.scrollHeight - vh);
+                        const ratio = clamp(currentScroll / maxScroll, 0, 1);
+                        progressBar.style.transform = 'scaleX(' + ratio.toFixed(4) + ')';
+                    }
+
+                    // Elemen dengan data-parallax="<speed>"
+                    for (let i = 0; i < parallaxEls.length; i++) {
+                        const el = parallaxEls[i];
+                        const speed = parseFloat(el.getAttribute('data-parallax')) || 0;
+                        const rect = el.getBoundingClientRect();
+                        const centerOffset = (rect.top + rect.height * 0.5) - vh * 0.5;
+                        const y = clamp(centerOffset * speed, -70, 70);
+                        el.style.transform = 'translate3d(0, ' + y.toFixed(2) + 'px, 0)';
+                    }
+
+                    // Gambar di dalam frame dengan data-parallax-img="<speed>"
+                    for (let i = 0; i < parallaxImgs.length; i++) {
+                        const img = parallaxImgs[i];
+                        const speed = parseFloat(img.getAttribute('data-parallax-img')) || 0.18;
+                        const parent = img.parentElement || img;
+                        const rect = parent.getBoundingClientRect();
+                        if (rect.bottom < -100 || rect.top > vh + 100) continue;
+                        const centerOffset = (rect.top + rect.height * 0.5) - vh * 0.5;
+                        const y = clamp(centerOffset * -speed, -65, 65);
+                        img.style.transform = 'translate3d(0, ' + y.toFixed(2) + 'px, 0) scale(1.18)';
+                    }
+
+                    // Efek scale-up & elevasi halus saat di-scroll (Hero Mockup)
+                    for (let i = 0; i < parallaxScales.length; i++) {
+                        const el = parallaxScales[i];
+                        const rect = el.getBoundingClientRect();
+                        const progress = clamp(1 - (rect.top / (vh * 0.85)), 0, 1);
+                        const scale = 0.965 + (progress * 0.035);
+                        const yLift = (1 - progress) * 18;
+                        el.style.transform = 'translate3d(0, ' + yLift.toFixed(2) + 'px, 0) scale(' + scale.toFixed(4) + ')';
+                    }
+
+                    if (Math.abs(targetScroll - currentScroll) >= 0.15) {
+                        rafId = requestAnimationFrame(updateParallax);
+                    } else {
+                        rafId = null;
+                    }
+                }
+
+                function onScroll() {
+                    targetScroll = window.scrollY || 0;
+                    if (!rafId) {
+                        rafId = requestAnimationFrame(updateParallax);
+                    }
+                }
+
+                window.addEventListener('scroll', onScroll, { passive: true });
+                window.addEventListener('resize', onScroll, { passive: true });
+                updateParallax();
+
+                // ============================================================
+                // 3. INTERACTIVE 3D CURSOR PARALLAX (Khusus Desktop pada Kartu/Mockup)
+                // ============================================================
+                if (window.matchMedia('(pointer: fine)').matches) {
+                    document.querySelectorAll('[data-tilt]').forEach(function (card) {
+                        const maxTilt = parseFloat(card.getAttribute('data-tilt')) || 2.2;
+                        card.addEventListener('mousemove', function (e) {
+                            const rect = card.getBoundingClientRect();
+                            const x = (e.clientX - rect.left) / rect.width - 0.5;
+                            const y = (e.clientY - rect.top) / rect.height - 0.5;
+                            card.style.transition = 'transform 0.15s ease-out';
+                            card.style.transform = 'perspective(1200px) rotateX(' + (-y * maxTilt).toFixed(2) + 'deg) rotateY(' + (x * maxTilt).toFixed(2) + 'deg) translate3d(0, -2px, 0)';
+                        });
+                        card.addEventListener('mouseleave', function () {
+                            card.style.transition = 'transform 0.6s cubic-bezier(0.22, 1, 0.36, 1)';
+                            card.style.transform = 'perspective(1200px) rotateX(0deg) rotateY(0deg) translate3d(0, 0, 0)';
+                        });
+                    });
+                }
             }
         });
     </script>

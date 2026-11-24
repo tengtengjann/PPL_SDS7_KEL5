@@ -36,11 +36,11 @@
                 </div>
 
                 <div class="flex flex-wrap items-center gap-2">
-                    <span class="text-xs font-bold px-3 py-1.5 rounded-lg bg-amber-50 text-amber-800 border border-amber-200">
-                        ⚡ {{ $user->xp ?? 0 }} XP
+                    <span class="text-xs font-bold px-3 py-1.5 rounded-lg bg-stone-100 text-stone-800 border border-stone-200">
+                        {{ $user->xp ?? 0 }} XP
                     </span>
-                    <span class="text-xs font-bold px-3 py-1.5 rounded-lg bg-emerald-50 text-emerald-800 border border-emerald-200">
-                        🏅 {{ $user->current_badge ? $user->current_badge->name : 'Energy Beginner' }}
+                    <span class="text-xs font-bold px-3 py-1.5 rounded-lg bg-[#E6EFE0] text-[#2D3A1E] border border-[#CFDEC4]">
+                        Badge: {{ $user->current_badge ? $user->current_badge->name : 'Energy Beginner' }}
                     </span>
                 </div>
             </div>
@@ -63,7 +63,7 @@
                 </div>
                 <div class="p-4 rounded-2xl bg-slate-50 border border-slate-100">
                     <p class="text-[11px] font-bold text-slate-400 uppercase tracking-wider mb-1">Total XP</p>
-                    <p class="text-sm font-semibold text-amber-700">⚡ {{ $user->xp ?? 0 }} Poin Pengalaman</p>
+                    <p class="text-sm font-semibold text-stone-800">{{ $user->xp ?? 0 }} Poin Pengalaman</p>
                 </div>
                 <div class="p-4 rounded-2xl bg-slate-50 border border-slate-100">
                     <p class="text-[11px] font-bold text-slate-400 uppercase tracking-wider mb-1">Bergabung Sejak</p>
@@ -71,23 +71,23 @@
                 </div>
                 <div class="p-4 rounded-2xl bg-slate-50 border border-slate-100">
                     <p class="text-[11px] font-bold text-slate-400 uppercase tracking-wider mb-1">Badge Diraih</p>
-                    <p class="text-sm font-semibold text-purple-700">🎖️ {{ $earnedBadges->count() }} Badge</p>
+                    <p class="text-sm font-semibold text-[#2D3A1E]">{{ $earnedBadges->count() }} Badge</p>
                 </div>
             </div>
 
             {{-- Navigasi Cepat --}}
             <div class="pt-6 border-t border-slate-100 flex flex-wrap gap-3">
-                <a href="{{ route('home') }}" class="px-5 py-2.5 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-800 text-xs font-bold transition">
+                <a href="{{ route('home') }}" class="px-5 py-2.5 rounded-full bg-slate-100 hover:bg-slate-200 text-slate-800 text-xs font-medium transition">
                     &larr; Kembali ke Beranda
                 </a>
-                <a href="{{ route('learning-progress.index') }}" class="px-5 py-2.5 rounded-xl bg-blue-50 hover:bg-blue-100 text-blue-800 text-xs font-bold border border-blue-200 transition">
-                    📊 Progres Belajar
+                <a href="{{ route('learning-progress.index') }}" class="px-5 py-2.5 rounded-full bg-stone-100 hover:bg-stone-200 text-stone-800 text-xs font-medium transition">
+                    Progres Belajar
                 </a>
-                <a href="{{ route('quiz-history.index') }}" class="px-5 py-2.5 rounded-xl bg-indigo-50 hover:bg-indigo-100 text-indigo-800 text-xs font-bold border border-indigo-200 transition">
-                    📝 Riwayat Kuis
+                <a href="{{ route('quiz-history.index') }}" class="px-5 py-2.5 rounded-full bg-stone-100 hover:bg-stone-200 text-stone-800 text-xs font-medium transition">
+                    Riwayat Kuis
                 </a>
-                <a href="{{ route('badges.index') }}" class="px-5 py-2.5 rounded-xl bg-amber-50 hover:bg-amber-100 text-amber-800 text-xs font-bold border border-amber-200 transition">
-                    🏅 Katalog Badge
+                <a href="{{ route('badges.index') }}" class="px-5 py-2.5 rounded-full bg-[#E6EFE0] hover:bg-[#D5E1CA] text-[#2D3A1E] text-xs font-medium transition">
+                    Katalog Badge
                 </a>
             </div>
         </div>
@@ -99,13 +99,12 @@
     <div class="bg-white rounded-3xl border border-slate-200 p-8 shadow-xs">
         <div class="flex items-center justify-between mb-6">
             <div>
-                <h2 class="text-xl font-extrabold text-slate-900 flex items-center gap-2">
-                    <span>🎖️</span>
+                <h2 class="text-xl font-serif text-slate-900 flex items-center gap-2">
                     <span>Koleksi Badge Saya</span>
                 </h2>
                 <p class="text-sm text-slate-500 mt-1">Badge pencapaian yang sudah Anda raih di EnergiKita.</p>
             </div>
-            <a href="{{ route('badges.index') }}" class="text-xs font-bold text-emerald-600 hover:text-emerald-700 transition hidden sm:inline">
+            <a href="{{ route('badges.index') }}" class="text-xs font-semibold text-[#2D3A1E] hover:underline transition hidden sm:inline">
                 Lihat Semua &rarr;
             </a>
         </div>
@@ -116,7 +115,7 @@
                     <div class="flex items-center gap-4 p-4 rounded-2xl bg-gradient-to-r from-emerald-50 to-teal-50 border border-emerald-200 hover:shadow-md transition-all duration-200">
                         {{-- Ikon Badge --}}
                         <div class="flex-shrink-0 w-14 h-14 rounded-xl bg-white shadow-sm flex items-center justify-center text-2xl border border-emerald-200">
-                            {{ $userBadge->badge->icon }}
+                            <span class="font-serif text-lg">{{ strtoupper(substr($userBadge->badge->name, 0, 1)) }}</span>
                         </div>
 
                         {{-- Info Badge --}}
@@ -150,25 +149,25 @@
                 </p>
                 @if($earnedBadges->count() < $totalBadges)
                     <span class="text-xs font-bold text-amber-600">
-                        {{ $totalBadges - $earnedBadges->count() }} badge lagi menunggu! 🚀
+                        {{ $totalBadges - $earnedBadges->count() }} badge lagi menunggu
                     </span>
                 @else
                     <span class="text-xs font-bold text-emerald-600">
-                        🎉 Semua badge berhasil diraih!
+                        Semua badge berhasil diraih.
                     </span>
                 @endif
             </div>
         @else
             {{-- Empty State --}}
             <div class="text-center py-12">
-                <p class="text-5xl mb-4">🔒</p>
+                <p class="text-3xl mb-3 font-serif text-stone-300">00</p>
                 <h3 class="text-lg font-bold text-slate-700">Belum Ada Badge</h3>
                 <p class="text-sm text-slate-500 mt-1 max-w-sm mx-auto">
                     Mulai pelajari materi dan selesaikan kuis untuk mendapatkan badge pencapaian pertama Anda!
                 </p>
                 <a href="{{ route('materials.index') }}"
                    class="inline-flex items-center gap-2 mt-5 px-5 py-2.5 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white text-sm font-bold shadow-md transition">
-                    📖 Mulai Belajar Sekarang
+                    Mulai Belajar Sekarang ↗
                 </a>
             </div>
         @endif

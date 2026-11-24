@@ -50,17 +50,17 @@
             <p class="text-lg font-bold mt-2
                 {{ $score >= 80 ? 'text-emerald-700' : ($score >= 60 ? 'text-amber-700' : 'text-rose-700') }}">
                 @if($score >= 80)
-                    🎉 Luar Biasa! Pemahaman Anda sangat baik!
+                    Luar Biasa! Pemahaman Anda sangat baik!
                 @elseif($score >= 60)
-                    👍 Cukup Baik! Terus pelajari materi untuk hasil yang lebih baik.
+                    Cukup Baik! Terus pelajari materi untuk hasil yang lebih baik.
                 @else
-                    💪 Jangan Menyerah! Pelajari pembahasan di bawah dan coba lagi.
+                    Jangan Menyerah! Pelajari pembahasan di bawah dan coba lagi.
                 @endif
             </p>
 
             @if(isset($xpEarned) && $xpEarned > 0)
-                <div class="mt-4 inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-amber-100 text-amber-900 border border-amber-300 text-sm font-black shadow-xs">
-                    <span>⚡ Selamat! Anda memperoleh +{{ $xpEarned }} XP ke akun Anda!</span>
+                <div class="mt-4 inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-[#E6EFE0] text-[#2D3A1E] border border-[#CFDEC4] text-sm font-black shadow-xs">
+                    <span>Selamat! Anda memperoleh +{{ $xpEarned }} XP ke akun Anda!</span>
                 </div>
             @endif
         </div>

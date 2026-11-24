@@ -3,20 +3,22 @@
 @section('title', 'Belajar & Modul Materi — EnergiKita')
 
 @section('content')
-<div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 space-y-8">
-    <!-- Header Modul EBT -->
+<div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 space-y-10">
+    <!-- Header Modul EBT (Area Inspired Editorial Style) -->
     <div class="text-center max-w-3xl mx-auto space-y-3">
-        <span class="px-3 py-1 rounded-full bg-emerald-100 text-emerald-800 text-xs font-bold uppercase tracking-wider">
-            📚 Kurikulum EBT &bull; Modul F-06
+        <span class="text-xs font-semibold uppercase tracking-wider text-[#4E6635] block">
+            Kurikulum EBT &bull; Modul Pembelajaran SDG 7
         </span>
-        <h1 class="text-3xl sm:text-4xl font-extrabold text-slate-900 tracking-tight">Modul Materi Energi Bersih</h1>
-        <p class="text-slate-600 text-base leading-relaxed">
+        <h1 class="text-4xl sm:text-5xl lg:text-6xl font-normal font-serif text-stone-950 tracking-tight">
+            Modul Materi Energi Bersih<span class="text-[#4E6635]">.</span>
+        </h1>
+        <p class="text-stone-500 text-sm sm:text-base leading-relaxed">
             Eksplorasi konsep fundamental, pemanfaatan teknologi, dan inovasi transisi energi terbarukan di Indonesia sesuai prinsip SDG 7.
         </p>
     </div>
 
     <!-- Panel Kontrol: Search Bar, Kategori Pills, dan Sort Dropdown -->
-    <div class="bg-white rounded-3xl border border-slate-200 p-4 sm:p-6 shadow-xs space-y-5">
+    <div class="bg-white rounded-3xl border border-stone-200 p-6 sm:p-8 shadow-xs space-y-6">
         <!-- Form Pencarian & Pengurutan -->
         <form id="filter-form" method="GET" action="{{ route('materials.index') }}" class="flex flex-col md:flex-row items-stretch md:items-center gap-3">
             <!-- PBI-016: Search Bar -->
@@ -31,11 +33,11 @@
                        name="search"
                        value="{{ $search ?? '' }}"
                        placeholder="Cari materi berdasarkan judul atau topik (misal: fotovoltaik, turbin, mikrohidro)..."
-                       class="w-full pl-10 pr-10 py-2.5 rounded-2xl border border-slate-200 bg-slate-50/50 text-sm text-slate-800 placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 focus:bg-white transition"
+                       class="w-full pl-10 pr-10 py-3 rounded-full border border-stone-200 bg-stone-50/50 text-sm text-stone-900 placeholder-stone-400 focus:outline-none focus:ring-1 focus:ring-stone-400 focus:bg-white transition"
                        autocomplete="off">
                 <button type="button"
                         id="search-clear-btn"
-                        class="absolute inset-y-0 right-0 pr-3.5 flex items-center text-slate-400 hover:text-slate-600 transition {{ empty($search) ? 'hidden' : '' }}"
+                        class="absolute inset-y-0 right-0 pr-3.5 flex items-center text-stone-400 hover:text-stone-600 transition {{ empty($search) ? 'hidden' : '' }}"
                         title="Hapus pencarian">
                     <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/>
@@ -45,19 +47,19 @@
 
             <!-- PBI-018: Dropdown Pengurutan (Sort) -->
             <div class="flex items-center gap-2 shrink-0">
-                <label for="sort-select" class="text-xs font-bold text-slate-500 whitespace-nowrap hidden sm:inline">
+                <label for="sort-select" class="text-xs font-semibold text-stone-500 whitespace-nowrap hidden sm:inline">
                     Urutkan:
                 </label>
                 <div class="relative w-full md:w-auto">
                     <select id="sort-select"
                             name="sort"
-                            class="w-full md:w-auto appearance-none pl-3.5 pr-9 py-2.5 rounded-2xl border border-slate-200 bg-slate-50/50 text-xs font-bold text-slate-700 hover:bg-slate-100 focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 focus:bg-white transition cursor-pointer">
-                        <option value="terbaru" {{ ($sort ?? 'terbaru') === 'terbaru' ? 'selected' : '' }}>✨ Terbaru</option>
-                        <option value="terlama" {{ ($sort ?? '') === 'terlama' ? 'selected' : '' }}>⏳ Terlama</option>
-                        <option value="judul-az" {{ ($sort ?? '') === 'judul-az' ? 'selected' : '' }}>🔤 Judul A - Z</option>
-                        <option value="judul-za" {{ ($sort ?? '') === 'judul-za' ? 'selected' : '' }}>🔤 Judul Z - A</option>
+                            class="w-full md:w-auto appearance-none pl-4 pr-10 py-2.5 rounded-full border border-stone-200 bg-stone-50/50 text-xs font-semibold text-stone-700 hover:bg-stone-100 focus:outline-none focus:ring-1 focus:ring-stone-400 focus:bg-white transition cursor-pointer">
+                        <option value="terbaru" {{ ($sort ?? 'terbaru') === 'terbaru' ? 'selected' : '' }}>Terbaru</option>
+                        <option value="terlama" {{ ($sort ?? '') === 'terlama' ? 'selected' : '' }}>Terlama</option>
+                        <option value="judul-az" {{ ($sort ?? '') === 'judul-az' ? 'selected' : '' }}>Judul A - Z</option>
+                        <option value="judul-za" {{ ($sort ?? '') === 'judul-za' ? 'selected' : '' }}>Judul Z - A</option>
                     </select>
-                    <div class="absolute inset-y-0 right-0 pr-3 flex items-center pointer-events-none text-slate-400">
+                    <div class="absolute inset-y-0 right-0 pr-3 flex items-center pointer-events-none text-stone-400">
                         <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/>
                         </svg>
@@ -70,10 +72,10 @@
         </form>
 
         <!-- PBI-017: Filter Kategori Energi (Tab / Pill) -->
-        <div class="pt-2 border-t border-slate-100">
-            <div class="flex items-center justify-between mb-2.5">
-                <span class="text-xs font-bold uppercase tracking-wider text-slate-400">Kategori Energi:</span>
-                <button type="button" id="reset-all-filters-btn" class="text-xs font-semibold text-emerald-600 hover:text-emerald-700 hover:underline {{ empty($search) && empty($category) ? 'hidden' : '' }}">
+        <div class="pt-4 border-t border-stone-100">
+            <div class="flex items-center justify-between mb-3">
+                <span class="text-xs font-semibold uppercase tracking-wider text-stone-400">Kategori Energi:</span>
+                <button type="button" id="reset-all-filters-btn" class="text-xs font-semibold text-[#2D3A1E] hover:underline {{ empty($search) && empty($category) ? 'hidden' : '' }}">
                     Bersihkan Filter
                 </button>
             </div>
@@ -84,7 +86,7 @@
                 @endphp
                 <button type="button"
                         data-category=""
-                        class="category-pill px-4 py-2 rounded-xl text-xs font-bold transition-all {{ empty($activeCategory) || $activeCategory === 'semua' ? 'bg-emerald-600 text-white shadow-sm ring-2 ring-emerald-600 ring-offset-1' : 'bg-slate-100 text-slate-700 hover:bg-slate-200' }}">
+                        class="category-pill px-4 py-2 rounded-full text-xs font-medium transition-all {{ empty($activeCategory) || $activeCategory === 'semua' ? 'bg-[#2D3A1E] text-white shadow-xs' : 'bg-stone-100 text-stone-700 hover:bg-stone-200' }}">
                     Semua
                 </button>
                 @foreach($categories as $cat)
@@ -93,20 +95,10 @@
                         $isActive = ($activeCategory === $catLower) || 
                                     (str_replace('-', ' ', $activeCategory) === $catLower) ||
                                     (!empty($activeCategory) && str_contains($catLower, $activeCategory));
-                        
-                        // Ikon kategori
-                        $icon = '📚';
-                        if (str_contains($catLower, 'surya')) $icon = '☀️';
-                        elseif (str_contains($catLower, 'angin')) $icon = '💨';
-                        elseif (str_contains($catLower, 'air')) $icon = '💧';
-                        elseif (str_contains($catLower, 'hemat') || str_contains($catLower, 'efisiensi')) $icon = '⚡';
-                        elseif (str_contains($catLower, 'biomassa')) $icon = '🌱';
-                        elseif (str_contains($catLower, 'geotermal')) $icon = '🌋';
                     @endphp
                     <button type="button"
                             data-category="{{ $cat }}"
-                            class="category-pill px-4 py-2 rounded-xl text-xs font-bold transition-all {{ $isActive ? 'bg-emerald-600 text-white shadow-sm ring-2 ring-emerald-600 ring-offset-1' : 'bg-slate-100 text-slate-700 hover:bg-slate-200' }}">
-                        <span>{{ $icon }}</span>
+                            class="category-pill px-4 py-2 rounded-full text-xs font-medium transition-all {{ $isActive ? 'bg-[#2D3A1E] text-white shadow-xs' : 'bg-stone-100 text-stone-700 hover:bg-stone-200' }}">
                         <span>{{ $cat }}</span>
                     </button>
                 @endforeach
@@ -161,26 +153,26 @@
                     elseif (str_contains($catLower, 'biomassa')) $badgeClass = 'bg-lime-100 text-lime-800';
                     elseif (str_contains($catLower, 'geotermal')) $badgeClass = 'bg-orange-100 text-orange-800';
                 @endphp
-                <div class="material-card rounded-3xl bg-white border border-slate-200 p-6 flex flex-col justify-between shadow-xs hover:shadow-lg transition-all duration-200 group">
-                    <div class="space-y-3">
+                <div class="material-card rounded-3xl bg-white border border-stone-200 p-7 flex flex-col justify-between hover:border-stone-400 hover:shadow-xl transition-all duration-300 group">
+                    <div class="space-y-4">
                         <div class="flex items-center justify-between">
-                            <span class="inline-block px-2.5 py-1 rounded-md text-xs font-bold {{ $badgeClass }}">
+                            <span class="inline-block px-3 py-1 rounded-full text-[10px] font-bold border {{ $badgeClass }}">
                                 {{ $item->category }}
                             </span>
-                            <span class="text-[11px] text-slate-400 font-medium">SDG 7 Modul</span>
+                            <span class="text-[11px] text-stone-400 font-medium">SDG 7 Modul</span>
                         </div>
-                        <h3 class="text-lg font-bold text-slate-900 leading-snug group-hover:text-emerald-700 transition">
+                        <h3 class="text-xl font-bold font-serif text-stone-900 leading-snug group-hover:text-[#2D3A1E] transition">
                             {{ $item->title }}
                         </h3>
-                        <p class="text-sm text-slate-600 line-clamp-3 leading-relaxed">
+                        <p class="text-xs text-stone-500 line-clamp-3 leading-relaxed">
                             {{ $item->description }}
                         </p>
                     </div>
-                    <div class="pt-5 mt-5 border-t border-slate-100 flex items-center justify-between">
-                        <span class="text-xs text-slate-400 font-medium">10 Menit Baca</span>
-                        <a href="{{ route('materials.show', $item->id) }}" class="text-xs font-bold text-emerald-600 hover:text-emerald-700 inline-flex items-center gap-1.5 transition">
+                    <div class="pt-5 mt-6 border-t border-stone-100 flex items-center justify-between">
+                        <span class="text-[11px] text-stone-400 font-medium">10 Menit Baca</span>
+                        <a href="{{ route('materials.show', $item->id) }}" class="text-xs font-semibold text-[#2D3A1E] hover:underline inline-flex items-center gap-1.5 transition">
                             <span>Buka Materi</span>
-                            <span class="group-hover:translate-x-1 transition-transform">&rarr;</span>
+                            <span class="text-xs">↗</span>
                         </a>
                     </div>
                 </div>

@@ -16,8 +16,8 @@
                     <span class="px-2.5 py-1 rounded-md text-xs font-bold bg-blue-50 text-blue-700 border border-blue-200">
                         {{ $quiz->material->category ?? 'Energi Terbarukan' }}
                     </span>
-                    <span class="px-2.5 py-1 rounded-md text-xs font-bold bg-amber-50 text-amber-700 border border-amber-200">
-                        ⚡ +50 XP
+                    <span class="px-2.5 py-1 rounded-md text-xs font-bold bg-[#EDE7DD] text-stone-800 border border-stone-200">
+                        +50 XP
                     </span>
                 </div>
                 <h1 class="text-2xl sm:text-3xl font-extrabold text-slate-900">{{ $quiz->title }}</h1>

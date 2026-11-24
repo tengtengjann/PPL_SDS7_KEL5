@@ -10,7 +10,7 @@
          ============================================================ --}}
     <div class="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
         <div>
-            <h1 class="text-2xl sm:text-3xl font-extrabold text-slate-900 tracking-tight">📝 Riwayat & Nilai Kuis</h1>
+            <h1 class="text-2xl sm:text-3xl font-extrabold text-slate-900 tracking-tight">Riwayat & Nilai Kuis</h1>
             <p class="text-sm text-slate-500 mt-1">Evaluasi hasil kuis Anda di EnergiKita. Riwayat diurutkan dari pengerjaan terbaru.</p>
         </div>
         <div class="flex items-center gap-2">
@@ -18,7 +18,7 @@
                 &larr; Beranda
             </a>
             <a href="{{ route('profile.index') }}" class="px-4 py-2 rounded-xl bg-emerald-50 hover:bg-emerald-100 text-emerald-700 text-xs font-bold border border-emerald-200 transition">
-                👤 Profil
+                Profil
             </a>
         </div>
     </div>
@@ -35,7 +35,7 @@
         <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
             <div class="bg-white rounded-2xl border border-slate-200 p-5 shadow-xs">
                 <div class="flex items-center gap-3">
-                    <div class="w-10 h-10 rounded-xl bg-blue-100 text-blue-600 flex items-center justify-center text-lg font-bold">🎯</div>
+                    <div class="w-10 h-10 rounded-xl bg-blue-100 text-blue-600 flex items-center justify-center text-lg font-bold"><span class="text-xs font-serif">01</span></div>
                     <div>
                         <p class="text-[11px] font-bold text-slate-400 uppercase tracking-wider">Total Kuis</p>
                         <p class="text-2xl font-extrabold text-slate-900">{{ $quizResults->count() }}</p>
@@ -44,7 +44,7 @@
             </div>
             <div class="bg-white rounded-2xl border border-slate-200 p-5 shadow-xs">
                 <div class="flex items-center gap-3">
-                    <div class="w-10 h-10 rounded-xl bg-emerald-100 text-emerald-600 flex items-center justify-center text-lg font-bold">📊</div>
+                    <div class="w-10 h-10 rounded-xl bg-emerald-100 text-emerald-600 flex items-center justify-center text-lg font-bold"><span class="text-xs font-serif">02</span></div>
                     <div>
                         <p class="text-[11px] font-bold text-slate-400 uppercase tracking-wider">Rata-rata Nilai</p>
                         <p class="text-2xl font-extrabold text-emerald-600">{{ $avgScore }}</p>
@@ -53,7 +53,7 @@
             </div>
             <div class="bg-white rounded-2xl border border-slate-200 p-5 shadow-xs">
                 <div class="flex items-center gap-3">
-                    <div class="w-10 h-10 rounded-xl bg-amber-100 text-amber-600 flex items-center justify-center text-lg font-bold">🏆</div>
+                    <div class="w-10 h-10 rounded-xl bg-amber-100 text-amber-600 flex items-center justify-center text-lg font-bold"><span class="text-xs font-serif">03</span></div>
                     <div>
                         <p class="text-[11px] font-bold text-slate-400 uppercase tracking-wider">Nilai Tertinggi</p>
                         <p class="text-2xl font-extrabold text-amber-600">{{ $bestScore }}</p>
@@ -62,7 +62,7 @@
             </div>
             <div class="bg-white rounded-2xl border border-slate-200 p-5 shadow-xs">
                 <div class="flex items-center gap-3">
-                    <div class="w-10 h-10 rounded-xl bg-indigo-100 text-indigo-600 flex items-center justify-center text-lg font-bold">✅</div>
+                    <div class="w-10 h-10 rounded-xl bg-indigo-100 text-indigo-600 flex items-center justify-center text-lg font-bold"><span class="text-xs font-serif">04</span></div>
                     <div>
                         <p class="text-[11px] font-bold text-slate-400 uppercase tracking-wider">Lulus (≥ 60)</p>
                         <p class="text-2xl font-extrabold text-indigo-600">{{ $passedCount }}</p>
@@ -78,7 +78,7 @@
     <div class="bg-white rounded-3xl border border-slate-200 shadow-xs overflow-hidden">
         <div class="px-6 py-5 border-b border-slate-100">
             <h2 class="text-lg font-extrabold text-slate-900 flex items-center gap-2">
-                <span>📋</span>
+                
                 <span>Daftar Riwayat Pengerjaan Kuis</span>
             </h2>
             <p class="text-xs text-slate-500 mt-1">Riwayat seluruh kuis yang pernah Anda kerjakan.</p>
@@ -110,7 +110,7 @@
                                         <p class="text-sm font-bold text-slate-800">{{ $result->quiz->title ?? 'Kuis Dihapus' }}</p>
                                         @if($result->quiz && $result->quiz->material)
                                             <p class="text-[11px] text-slate-400 mt-0.5">
-                                                📚 {{ $result->quiz->material->title }}
+                                                {{ $result->quiz->material->title }}
                                                 <span class="text-slate-300 mx-1">•</span>
                                                 {{ $result->quiz->material->category }}
                                             </p>
@@ -166,7 +166,7 @@
                             <div class="flex-1 min-w-0">
                                 <p class="text-sm font-bold text-slate-800">{{ $index + 1 }}. {{ $result->quiz->title ?? 'Kuis Dihapus' }}</p>
                                 @if($result->quiz && $result->quiz->material)
-                                    <p class="text-[11px] text-slate-400 mt-0.5">📚 {{ $result->quiz->material->category }}</p>
+                                    <p class="text-[11px] text-slate-400 mt-0.5">{{ $result->quiz->material->category }}</p>
                                 @endif
                             </div>
                             <span class="text-xl font-extrabold {{ $score >= 80 ? 'text-emerald-600' : ($score >= 60 ? 'text-amber-600' : 'text-red-500') }}">
@@ -191,14 +191,14 @@
         @else
             {{-- Empty State --}}
             <div class="text-center py-16 px-6">
-                <p class="text-5xl mb-4">📭</p>
+                <p class="text-3xl mb-3 font-serif text-stone-300">00</p>
                 <h3 class="text-lg font-bold text-slate-700">Belum Ada Riwayat Kuis</h3>
                 <p class="text-sm text-slate-500 mt-1 max-w-sm mx-auto">
                     Anda belum pernah mengerjakan kuis. Mulai kerjakan kuis untuk mengevaluasi pemahaman Anda!
                 </p>
                 <a href="{{ route('quiz.index') }}"
                    class="inline-flex items-center gap-2 mt-5 px-5 py-2.5 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white text-sm font-bold shadow-md transition">
-                    🎯 Mulai Kuis Sekarang
+                    Mulai Kuis Sekarang ↗
                 </a>
             </div>
         @endif
@@ -207,10 +207,10 @@
     {{-- Navigasi Bawah --}}
     <div class="flex flex-wrap gap-3 justify-center">
         <a href="{{ route('learning-progress.index') }}" class="px-5 py-2.5 rounded-xl bg-blue-50 hover:bg-blue-100 text-blue-800 text-xs font-bold border border-blue-200 transition">
-            📊 Progres Belajar
+            Progres Belajar
         </a>
         <a href="{{ route('quiz.index') }}" class="px-5 py-2.5 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-bold transition shadow-md">
-            🎯 Kerjakan Kuis Baru
+            Kerjakan Kuis Baru ↗
         </a>
     </div>
 

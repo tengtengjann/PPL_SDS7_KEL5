@@ -10,15 +10,15 @@
          ============================================================ --}}
     <div class="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
         <div>
-            <h1 class="text-2xl sm:text-3xl font-extrabold text-slate-900 tracking-tight">📊 Progres Belajar Saya</h1>
+            <h1 class="text-2xl sm:text-3xl font-extrabold text-slate-900 tracking-tight">Progres Belajar Saya</h1>
             <p class="text-sm text-slate-500 mt-1">Pantau status penyelesaian materi pembelajaran Anda di EnergiKita.</p>
         </div>
         <div class="flex items-center gap-2">
             <a href="{{ route('home') }}" class="px-4 py-2 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-700 text-xs font-bold transition">
                 &larr; Beranda
             </a>
-            <a href="{{ route('profile.index') }}" class="px-4 py-2 rounded-xl bg-emerald-50 hover:bg-emerald-100 text-emerald-700 text-xs font-bold border border-emerald-200 transition">
-                👤 Profil
+            <a href="{{ route('profile.index') }}" class="px-4 py-2 rounded-xl bg-[#E6EFE0] hover:bg-[#D5E1CA] text-[#2D3A1E] text-xs font-bold transition">
+                Profil
             </a>
         </div>
     </div>
@@ -30,7 +30,9 @@
         {{-- Total Materi --}}
         <div class="bg-white rounded-2xl border border-slate-200 p-5 shadow-xs">
             <div class="flex items-center gap-3">
-                <div class="w-10 h-10 rounded-xl bg-blue-100 text-blue-600 flex items-center justify-center text-lg font-bold">📚</div>
+                <div class="w-10 h-10 rounded-xl bg-stone-100 text-stone-700 flex items-center justify-center font-bold">
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"/></svg>
+                </div>
                 <div>
                     <p class="text-[11px] font-bold text-slate-400 uppercase tracking-wider">Total Materi</p>
                     <p class="text-2xl font-extrabold text-slate-900">{{ $totalMaterials }}</p>
@@ -41,10 +43,12 @@
         {{-- Selesai --}}
         <div class="bg-white rounded-2xl border border-slate-200 p-5 shadow-xs">
             <div class="flex items-center gap-3">
-                <div class="w-10 h-10 rounded-xl bg-emerald-100 text-emerald-600 flex items-center justify-center text-lg font-bold">✅</div>
+                <div class="w-10 h-10 rounded-xl bg-[#E6EFE0] text-[#2D3A1E] flex items-center justify-center font-bold">
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/></svg>
+                </div>
                 <div>
                     <p class="text-[11px] font-bold text-slate-400 uppercase tracking-wider">Selesai</p>
-                    <p class="text-2xl font-extrabold text-emerald-600">{{ $completedCount }}</p>
+                    <p class="text-2xl font-extrabold text-[#2D3A1E]">{{ $completedCount }}</p>
                 </div>
             </div>
         </div>
@@ -52,10 +56,12 @@
         {{-- Belum Selesai --}}
         <div class="bg-white rounded-2xl border border-slate-200 p-5 shadow-xs">
             <div class="flex items-center gap-3">
-                <div class="w-10 h-10 rounded-xl bg-amber-100 text-amber-600 flex items-center justify-center text-lg font-bold">⏳</div>
+                <div class="w-10 h-10 rounded-xl bg-stone-100 text-stone-600 flex items-center justify-center font-bold">
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9" stroke-width="1.8"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" d="M12 6v6l4 2"/></svg>
+                </div>
                 <div>
                     <p class="text-[11px] font-bold text-slate-400 uppercase tracking-wider">Belum Selesai</p>
-                    <p class="text-2xl font-extrabold text-amber-600">{{ $notCompletedCount }}</p>
+                    <p class="text-2xl font-extrabold text-stone-700">{{ $notCompletedCount }}</p>
                 </div>
             </div>
         </div>
@@ -63,10 +69,12 @@
         {{-- Persentase --}}
         <div class="bg-white rounded-2xl border border-slate-200 p-5 shadow-xs">
             <div class="flex items-center gap-3">
-                <div class="w-10 h-10 rounded-xl bg-indigo-100 text-indigo-600 flex items-center justify-center text-lg font-bold">📈</div>
+                <div class="w-10 h-10 rounded-xl bg-[#EDE7DD] text-stone-800 flex items-center justify-center font-bold">
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6"/></svg>
+                </div>
                 <div>
                     <p class="text-[11px] font-bold text-slate-400 uppercase tracking-wider">Persentase</p>
-                    <p class="text-2xl font-extrabold text-indigo-600">{{ $percentage }}%</p>
+                    <p class="text-2xl font-extrabold text-stone-900">{{ $percentage }}%</p>
                 </div>
             </div>
         </div>
@@ -78,18 +86,18 @@
     <div class="bg-white rounded-2xl border border-slate-200 p-6 shadow-xs">
         <div class="flex items-center justify-between mb-3">
             <span class="text-sm font-semibold text-slate-700">Progress Keseluruhan</span>
-            <span class="text-sm font-extrabold text-emerald-600">{{ $percentage }}%</span>
+            <span class="text-sm font-extrabold text-[#2D3A1E]">{{ $percentage }}%</span>
         </div>
         <div class="w-full h-4 bg-slate-100 rounded-full overflow-hidden border border-slate-200">
-            <div class="h-full bg-gradient-to-r from-emerald-500 via-teal-400 to-amber-400 rounded-full transition-all duration-700 shadow-sm"
+            <div class="h-full bg-[#2D3A1E] rounded-full transition-all duration-700 shadow-sm"
                  style="width: {{ max($percentage > 0 ? 2 : 0, $percentage) }}%;"></div>
         </div>
         <p class="text-xs text-slate-400 mt-2">
             {{ $completedCount }} dari {{ $totalMaterials }} materi telah diselesaikan.
             @if($totalMaterials > 0 && $completedCount < $totalMaterials)
-                Terus semangat! 💪
+                Terus semangat!
             @elseif($totalMaterials > 0 && $completedCount >= $totalMaterials)
-                🎉 Luar biasa! Semua materi telah diselesaikan!
+                Luar biasa! Semua materi telah diselesaikan!
             @endif
         </p>
     </div>
@@ -100,7 +108,6 @@
     <div class="bg-white rounded-3xl border border-slate-200 shadow-xs overflow-hidden">
         <div class="px-6 py-5 border-b border-slate-100">
             <h2 class="text-lg font-extrabold text-slate-900 flex items-center gap-2">
-                <span>📋</span>
                 <span>Daftar Materi Pembelajaran</span>
             </h2>
             <p class="text-xs text-slate-500 mt-1">Status penyelesaian setiap materi berdasarkan akun Anda.</p>
@@ -171,7 +178,7 @@
         @else
             {{-- Empty State --}}
             <div class="text-center py-16 px-6">
-                <p class="text-5xl mb-4">📭</p>
+                <p class="text-3xl mb-3 font-serif text-stone-300">00</p>
                 <h3 class="text-lg font-bold text-slate-700">Belum Ada Materi</h3>
                 <p class="text-sm text-slate-500 mt-1 max-w-sm mx-auto">
                     Belum ada materi pembelajaran yang tersedia saat ini. Silakan cek kembali nanti.

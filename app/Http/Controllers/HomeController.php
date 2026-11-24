@@ -6,6 +6,7 @@ use App\Models\Achievement;
 use App\Models\Material;
 use App\Models\Mission;
 use App\Models\Progress;
+use App\Models\QuizResult;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -152,6 +153,9 @@ class HomeController extends Controller
         // 4. RINGKASAN PROGRES BELAJAR PENGGUNA (Section Bawah Beranda)
         // -------------------------------------------------------------
         $totalMaterials = Material::count();
+        $totalPlatformXp = (int) User::sum('xp');
+        $totalAchievements = max(1, Achievement::count());
+        $maxXpThreshold = max(300, (int) Achievement::max('xp_threshold'));
         $isLoggedIn = Auth::check();
         $currentUser = Auth::user();
 
@@ -165,16 +169,20 @@ class HomeController extends Controller
                 ->where('status', 'in_progress')
                 ->count();
 
+            $quizzesCompleted = QuizResult::where('user_id', $currentUser->id)->count();
+
             $percentage = $totalMaterials > 0
                 ? round(($completedCount / $totalMaterials) * 100)
                 : 0;
 
-            $xp = $currentUser->xp ?? 0;
+            $xp = (int) ($currentUser->xp ?? 0);
 
             // Cari badge tertinggi yang sudah dicapai berdasarkan threshold XP
             $currentBadge = Achievement::where('xp_threshold', '<=', $xp)
                 ->orderBy('xp_threshold', 'desc')
                 ->first();
+
+            $unlockedAchievements = Achievement::where('xp_threshold', '<=', $xp)->count();
 
             $badgeName = $currentBadge ? $currentBadge->name : 'Energy Beginner';
             $badgeIcon = $currentBadge ? ($currentBadge->badge_icon ?? 'beginner') : 'beginner';
@@ -185,6 +193,7 @@ class HomeController extends Controller
                 ->first();
 
             $xpNeeded = $nextBadge ? max(0, $nextBadge->xp_threshold - $xp) : 0;
+            $xpProgressPercent = min(100, (int) round(($xp / $maxXpThreshold) * 100));
 
             $userProgress = [
                 'is_logged_in' => true,
@@ -194,12 +203,17 @@ class HomeController extends Controller
                 'total_materials' => $totalMaterials,
                 'completed_count' => $completedCount,
                 'in_progress_count' => $inProgressCount,
+                'quizzes_completed' => $quizzesCompleted,
                 'percentage' => $percentage,
                 'xp' => $xp,
+                'total_platform_xp' => $totalPlatformXp,
                 'badge' => $badgeName,
                 'badge_icon' => $badgeIcon,
                 'next_badge' => $nextBadge ? $nextBadge->name : null,
                 'xp_needed' => $xpNeeded,
+                'unlocked_achievements' => $unlockedAchievements,
+                'total_achievements' => $totalAchievements,
+                'xp_progress_percent' => $xpProgressPercent,
             ];
         } else {
             // Pengguna belum login (Guest): Tampilkan nilai default awal
@@ -215,12 +229,17 @@ class HomeController extends Controller
                 'total_materials' => $totalMaterials,
                 'completed_count' => 0,
                 'in_progress_count' => 0,
+                'quizzes_completed' => 0,
                 'percentage' => 0,
                 'xp' => 0,
+                'total_platform_xp' => $totalPlatformXp,
                 'badge' => $initialBadgeName,
                 'badge_icon' => 'beginner',
                 'next_badge' => 'Green Explorer',
                 'xp_needed' => 50,
+                'unlocked_achievements' => 1,
+                'total_achievements' => $totalAchievements,
+                'xp_progress_percent' => 0,
             ];
         }
 

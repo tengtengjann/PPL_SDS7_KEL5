@@ -3,72 +3,73 @@
 @section('title', 'Admin — Kelola Badge Pencapaian — EnergiKita')
 
 @section('content')
-<div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+<div class="max-w-6xl mx-auto px-4 sm:px-6 py-12 space-y-8">
 
     {{-- Header --}}
-    <div class="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 mb-8">
+    <div class="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
         <div>
-            <h1 class="text-2xl font-extrabold text-slate-900">🛡️ Kelola Badge Pencapaian</h1>
-            <p class="text-sm text-slate-500 mt-1">Tambah, edit, atau hapus badge pencapaian belajar EnergiKita.</p>
+            <p class="text-[11px] font-semibold uppercase tracking-[0.18em] text-[#4E6635]">Panel Organisasi SRE</p>
+            <h1 class="mt-2 text-3xl sm:text-4xl text-stone-950">Kelola Badge Pencapaian<span class="text-[#4E6635]">.</span></h1>
+            <p class="text-sm text-stone-500 mt-1">Tambah, ubah, atau hapus badge pencapaian belajar EnergiKita.</p>
         </div>
-        <a href="{{ route('admin.badges.create') }}" 
-           class="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white text-sm font-bold shadow-md transition transform hover:-translate-y-0.5">
-            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"/>
-            </svg>
-            Tambah Badge Baru
+        <a href="{{ route('admin.badges.create') }}"
+           class="inline-flex items-center gap-2 px-6 py-3 rounded-full bg-[#2D3A1E] hover:bg-[#1F2915] text-white text-xs font-medium transition">
+            <span>Tambah Badge Baru</span>
+            <span aria-hidden="true">↗</span>
         </a>
     </div>
 
     {{-- Tabel Badge --}}
-    <div class="bg-white rounded-2xl border border-slate-200 shadow-xs overflow-hidden">
+    <div class="bg-white rounded-[24px] border border-stone-200 overflow-hidden">
         <div class="overflow-x-auto">
             <table class="w-full text-sm">
-                <thead class="bg-slate-50 border-b border-slate-200">
+                <thead class="bg-stone-50 border-b border-stone-200">
                     <tr>
-                        <th class="px-6 py-4 text-left text-xs font-bold text-slate-600 uppercase tracking-wider">Badge</th>
-                        <th class="px-6 py-4 text-left text-xs font-bold text-slate-600 uppercase tracking-wider">Kriteria</th>
-                        <th class="px-6 py-4 text-center text-xs font-bold text-slate-600 uppercase tracking-wider">Nilai</th>
-                        <th class="px-6 py-4 text-center text-xs font-bold text-slate-600 uppercase tracking-wider">Pemilik</th>
-                        <th class="px-6 py-4 text-right text-xs font-bold text-slate-600 uppercase tracking-wider">Aksi</th>
+                        <th class="px-6 py-4 text-left text-[11px] font-semibold text-stone-500 uppercase tracking-wider">Badge</th>
+                        <th class="px-6 py-4 text-left text-[11px] font-semibold text-stone-500 uppercase tracking-wider">Kriteria</th>
+                        <th class="px-6 py-4 text-center text-[11px] font-semibold text-stone-500 uppercase tracking-wider">Nilai Target</th>
+                        <th class="px-6 py-4 text-center text-[11px] font-semibold text-stone-500 uppercase tracking-wider">Peraih</th>
+                        <th class="px-6 py-4 text-right text-[11px] font-semibold text-stone-500 uppercase tracking-wider">Aksi</th>
                     </tr>
                 </thead>
-                <tbody class="divide-y divide-slate-100">
+                <tbody class="divide-y divide-stone-100">
                     @forelse($badges as $badge)
-                    <tr class="hover:bg-slate-50 transition">
+                    <tr class="hover:bg-stone-50/70 transition">
                         <td class="px-6 py-4">
-                            <div class="flex items-center gap-3">
-                                <span class="text-2xl">{{ $badge->icon }}</span>
+                            <div class="flex items-center gap-3.5">
+                                <div class="w-10 h-10 rounded-xl bg-[#E6EFE0] text-[#2D3A1E] flex items-center justify-center font-serif text-lg shrink-0">
+                                    {{ strtoupper(substr($badge->name, 0, 1)) }}
+                                </div>
                                 <div>
-                                    <p class="font-bold text-slate-900">{{ $badge->name }}</p>
-                                    <p class="text-xs text-slate-500 line-clamp-1 max-w-xs">{{ $badge->description }}</p>
+                                    <p class="font-semibold text-stone-900">{{ $badge->name }}</p>
+                                    <p class="text-xs text-stone-500 line-clamp-1 max-w-xs">{{ $badge->description }}</p>
                                 </div>
                             </div>
                         </td>
                         <td class="px-6 py-4">
-                            <span class="inline-flex px-2.5 py-1 rounded-lg bg-blue-50 text-blue-700 text-xs font-semibold border border-blue-200">
+                            <span class="inline-flex px-3 py-1 rounded-full bg-stone-100 text-stone-700 text-xs font-medium">
                                 {{ ucwords(str_replace('_', ' ', $badge->criteria_type)) }}
                             </span>
                         </td>
                         <td class="px-6 py-4 text-center">
-                            <span class="font-black text-slate-900">{{ $badge->criteria_value }}</span>
+                            <span class="font-semibold text-stone-900 tabular-nums">{{ $badge->criteria_value }}</span>
                         </td>
                         <td class="px-6 py-4 text-center">
-                            <span class="text-sm font-semibold text-slate-600">{{ $badge->users()->count() }}</span>
+                            <span class="text-sm text-stone-600 tabular-nums">{{ $badge->users()->count() }}</span>
                         </td>
                         <td class="px-6 py-4 text-right">
                             <div class="flex items-center justify-end gap-2">
-                                <a href="{{ route('admin.badges.edit', $badge) }}" 
-                                   class="px-3 py-1.5 rounded-lg bg-amber-50 text-amber-700 text-xs font-bold hover:bg-amber-100 border border-amber-200 transition">
+                                <a href="{{ route('admin.badges.edit', $badge) }}"
+                                   class="px-3.5 py-1.5 rounded-full bg-stone-100 text-stone-700 text-xs font-medium hover:bg-stone-200 transition">
                                     Edit
                                 </a>
-                                <form method="POST" action="{{ route('admin.badges.destroy', $badge) }}" 
+                                <form method="POST" action="{{ route('admin.badges.destroy', $badge) }}"
                                       onsubmit="return confirm('Yakin ingin menghapus badge &quot;{{ $badge->name }}&quot;?')"
                                       class="inline">
                                     @csrf
                                     @method('DELETE')
-                                    <button type="submit" 
-                                            class="px-3 py-1.5 rounded-lg bg-rose-50 text-rose-700 text-xs font-bold hover:bg-rose-100 border border-rose-200 transition">
+                                    <button type="submit"
+                                            class="px-3.5 py-1.5 rounded-full bg-[#FBF4F2] text-[#9A4B39] text-xs font-medium hover:bg-[#F5E4DF] transition">
                                         Hapus
                                     </button>
                                 </form>
@@ -77,9 +78,9 @@
                     </tr>
                     @empty
                     <tr>
-                        <td colspan="5" class="px-6 py-16 text-center text-slate-400">
-                            <p class="text-4xl mb-3">📭</p>
-                            <p class="font-bold">Belum ada badge.</p>
+                        <td colspan="5" class="px-6 py-16 text-center text-stone-400">
+                            <p class="text-3xl mb-2 text-stone-300 font-serif">00</p>
+                            <p class="font-semibold text-stone-700">Belum ada badge.</p>
                             <p class="text-xs mt-1">Klik tombol "Tambah Badge Baru" untuk memulai.</p>
                         </td>
                     </tr>
@@ -90,8 +91,8 @@
     </div>
 
     {{-- Navigasi Kembali --}}
-    <div class="mt-8">
-        <a href="{{ route('home') }}" class="text-sm text-slate-500 hover:text-emerald-600 font-semibold transition">
+    <div>
+        <a href="{{ route('home') }}" class="text-xs text-stone-500 hover:text-stone-900 font-medium transition">
             &larr; Kembali ke Beranda
         </a>
     </div>

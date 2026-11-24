@@ -4,8 +4,10 @@ use App\Http\Controllers\BadgeAdminController;
 use App\Http\Controllers\BadgeController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\LearningProgressController;
+use App\Http\Controllers\MaterialAdminController;
 use App\Http\Controllers\MaterialController;
 use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\QuestionAdminController;
 use App\Http\Controllers\QuizController;
 use App\Http\Controllers\QuizHistoryController;
 use App\Models\Badge;
@@ -184,13 +186,51 @@ Route::get('/badge', function () {
 
 
 // =========================================================================
-// Admin CRUD Badge (hanya untuk role SRE / Admin)
+// Admin Dashboard & Pengelolaan Konten (F-05: PBI-013, PBI-014, PBI-015)
+// Khusus untuk role Organisasi SRE ('sre' atau 'admin')
 // =========================================================================
-Route::prefix('admin/badges')->name('admin.badges.')->group(function () {
-    Route::get('/',           [BadgeAdminController::class, 'index'])->name('index');
-    Route::get('/create',     [BadgeAdminController::class, 'create'])->name('create');
-    Route::post('/',          [BadgeAdminController::class, 'store'])->name('store');
-    Route::get('/{badge}/edit', [BadgeAdminController::class, 'edit'])->name('edit');
-    Route::put('/{badge}',    [BadgeAdminController::class, 'update'])->name('update');
-    Route::delete('/{badge}', [BadgeAdminController::class, 'destroy'])->name('destroy');
+Route::middleware(['auth', 'role.sre'])->prefix('admin')->name('admin.')->group(function () {
+    // 1. PBI-013 & PBI-014: Kelola Materi Pembelajaran
+    Route::prefix('materials')->name('materials.')->group(function () {
+        Route::get('/',              [MaterialAdminController::class, 'index'])->name('index');
+        Route::get('/create',        [MaterialAdminController::class, 'create'])->name('create');
+        Route::post('/',             [MaterialAdminController::class, 'store'])->name('store');
+        Route::get('/{material}/edit', [MaterialAdminController::class, 'edit'])->name('edit');
+        Route::put('/{material}',    [MaterialAdminController::class, 'update'])->name('update');
+        Route::delete('/{material}', [MaterialAdminController::class, 'destroy'])->name('destroy');
+
+        // Shortcut ke kelola soal materi
+        Route::get('/{material}/questions', [QuestionAdminController::class, 'indexByMaterial'])->name('questions');
+    });
+
+    // 2. PBI-015: Kelola Soal & Kunci Jawaban Kuis
+    Route::prefix('quizzes/{quiz}/questions')->name('quizzes.questions.')->group(function () {
+        Route::get('/',                [QuestionAdminController::class, 'index'])->name('index');
+        Route::get('/create',          [QuestionAdminController::class, 'create'])->name('create');
+        Route::post('/',               [QuestionAdminController::class, 'store'])->name('store');
+        Route::get('/{question}/edit', [QuestionAdminController::class, 'edit'])->name('edit');
+        Route::put('/{question}',      [QuestionAdminController::class, 'update'])->name('update');
+        Route::delete('/{question}',   [QuestionAdminController::class, 'destroy'])->name('destroy');
+    });
+
+    // Endpoint CRUD soal kuis langsung
+    Route::put('/questions/{question}', function (Request $request, \App\Models\Question $question) {
+        $quiz = $question->quiz;
+        return app(QuestionAdminController::class)->update($request, $quiz, $question);
+    })->name('questions.update');
+
+    Route::delete('/questions/{question}', function (Request $request, \App\Models\Question $question) {
+        $quiz = $question->quiz;
+        return app(QuestionAdminController::class)->destroy($request, $quiz, $question);
+    })->name('questions.destroy');
+
+    // 3. Admin CRUD Badge
+    Route::prefix('badges')->name('badges.')->group(function () {
+        Route::get('/',             [BadgeAdminController::class, 'index'])->name('index');
+        Route::get('/create',       [BadgeAdminController::class, 'create'])->name('create');
+        Route::post('/',            [BadgeAdminController::class, 'store'])->name('store');
+        Route::get('/{badge}/edit', [BadgeAdminController::class, 'edit'])->name('edit');
+        Route::put('/{badge}',      [BadgeAdminController::class, 'update'])->name('update');
+        Route::delete('/{badge}',   [BadgeAdminController::class, 'destroy'])->name('destroy');
+    });
 });

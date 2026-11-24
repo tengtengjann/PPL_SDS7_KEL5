@@ -5,8 +5,8 @@
 @section('content')
 <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-12 space-y-10">
     <div class="text-center space-y-3">
-        <span class="px-3 py-1 rounded-full bg-amber-100 text-amber-800 text-xs font-bold uppercase tracking-wider">
-            🏆 Leaderboard
+        <span class="px-3 py-1 rounded-full bg-[#EDE7DD] text-stone-800 text-xs font-bold uppercase tracking-wider">
+            Leaderboard
         </span>
         <h1 class="text-3xl sm:text-4xl font-extrabold text-slate-900">Peringkat Pembelajar Teraktif</h1>
         <p class="text-slate-600 text-base">
@@ -33,7 +33,7 @@
                             Badge: {{ $u->current_badge ? $u->current_badge->name : 'Energy Beginner' }}
                         </span>
                         <span class="text-sm font-black text-amber-600 flex items-center gap-1">
-                            ⚡ {{ $u->xp }} XP
+                            {{ $u->xp }} XP
                         </span>
                     </div>
                 </div>
